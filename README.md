@@ -1,0 +1,1 @@
+Komputerowe Systemy Rozpoznawania
