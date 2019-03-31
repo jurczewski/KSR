@@ -7,38 +7,36 @@ namespace Zad1
 {
     public class Program
     {        
-        List<string> _validPlaces = new List<string>
-        {
-            "west-germany",
-            "usa",
-            "france",
-            "uk",
-            "canada",
-            "japan"
-        };
+
         static void Main(string[] args)
         {
-            //List<Article> _readDocuments = new DocumentReader().ObtainVectorSpaceModels().ToList();
-            //foreach (var article in _readDocuments)
-            //{
-            //    foreach ( var tags in article.Tags)
-            //    {
-            //        foreach( var s in tags.Value)
-            //        {
-            //            Console.Write(s+ " ");
+            List<string> validPlaces = new List<string>
+            {
+                "west-germany",
+                "usa",
+                "france",
+                "uk",
+                "canada",
+                "japan"
+            };
 
-            //        }
-            //    }
-            //    Console.WriteLine();
+            List<Article> allArticles = new DocumentReader().ObtainVectorSpaceModels().ToList();
+            List<Article> validArticles = ArticleUtils.GetArticlesWithValidTags(allArticles, "places", validPlaces);
 
-            //}
-
-            List<Article> _readDocuments = new DocumentReader().ObtainVectorSpaceModels().ToList();
             Dictionary<string, int> wordsWithoutStemming = new Dictionary<string, int>();
 
-            foreach(var doc in _readDocuments)
+            foreach(var doc in validArticles)
             {
+                foreach(var t in doc.Tags)
+                {
+                    Console.Write(t.Key);
+                    foreach(var v in t.Value)
+                    {
+                        Console.Write(" " + v);
+                    }
+                    Console.WriteLine();
 
+                }
                 foreach (string s in doc.Words)
                 {
                     if (!wordsWithoutStemming.ContainsKey(s))
@@ -56,7 +54,7 @@ namespace Zad1
             Stemmer stemmer = new EnglishStemmer();
             Dictionary<string, int> stemmedWords = new Dictionary<string, int>();
 
-            foreach (var doc in _readDocuments)
+            foreach (var doc in allArticles)
             {
 
                 foreach (string s in doc.Words)
@@ -90,16 +88,6 @@ namespace Zad1
                 double tf = (double)s.Value / (double)stemmedWords.Count;
                 Console.WriteLine(s.Key + " " + tf + " ");
             }
-
-            //foreach (var word in _readDocuments[0].Words)
-            //{
-            //    Console.WriteLine(word);
-            //}
-
-            //foreach (var tag in _readDocuments[0].Tags)
-            //{
-            //    Console.WriteLine(tag.Key + ", Number of Values: " + tag.Value.Count);
-            //}
 
             Console.ReadKey();
         }
