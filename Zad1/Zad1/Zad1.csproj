@@ -51,6 +51,9 @@
   <ItemGroup>
     <Compile Include="ArticleUtils.cs" />
     <Compile Include="DocumentReader.cs" />
+    <Compile Include="Metrics\EuclideanMetric.cs" />
+    <Compile Include="Metrics\IMetric.cs" />
+    <Compile Include="Metrics\ManhattanMetric.cs" />
     <Compile Include="Models\Article.cs" />
     <Compile Include="IStemmer.cs" />
     <Compile Include="EnglishStemmer.cs" />
