@@ -14,5 +14,23 @@ namespace Zad1
         {
             return allArticles.Where(n => n.Tags.ContainsKey(tagName) && n.Tags[tagName].Count == 1 && tags.Contains(n.Tags[tagName][0])).ToList();
         }
+
+        public static ProcessedArticle processArticle(Article article, List<string> stopList)
+        {
+            Stemmer stemmer = new EnglishStemmer();
+            List<string> words = new List<string>();
+            List<string> stemmedWords = new List<string>();
+
+            words = article.Words.Where(e => !stopList.Contains(e)).ToList();
+
+            foreach (string s in words)
+            {
+                string stemmed = stemmer.GetSteamWord(s);
+                stemmedWords.Add(stemmed);
+            }
+
+            string label = article.Tags["places"][0];
+            return new ProcessedArticle(article, label, stemmedWords);
+        }
     }
 }

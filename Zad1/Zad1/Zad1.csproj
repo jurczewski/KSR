@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ArticleUtils.cs" />
     <Compile Include="DocumentReader.cs" />
+    <Compile Include="Models\ProcessedArticle.cs" />
     <Compile Include="Models\Article.cs" />
     <Compile Include="IStemmer.cs" />
     <Compile Include="EnglishStemmer.cs" />
