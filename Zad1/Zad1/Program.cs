@@ -20,6 +20,8 @@ namespace Zad1
                 "japan"
             };
 
+            List<string> usaCities = new List<string> {"new york", "los angeles", "chicago", "houston", "phoenix", "philadelphia"};
+
             List<Article> allArticles = new DocumentReader().ObtainVectorSpaceModels().ToList();
             List<Article> validArticles = ArticleUtils.GetArticlesWithValidTags(allArticles, "places", validPlaces);
 
