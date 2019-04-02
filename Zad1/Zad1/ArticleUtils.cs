@@ -32,5 +32,46 @@ namespace Zad1
             string label = article.Tags["places"][0];
             return new ProcessedArticle(article, label, stemmedWords);
         }
+
+        public static Dictionary<string, int> tf(List<string> words)
+        {
+            Dictionary<string, int> wordDictionary = new Dictionary<string, int>();
+            foreach (string s in words)
+            {
+                if (!wordDictionary.ContainsKey(s))
+                {
+                    wordDictionary.Add(s, 1);
+                }
+                else
+                {
+                    wordDictionary[s] = wordDictionary[s] + 1;
+                }
+            }
+            return wordDictionary;
+        }
+
+        public static Dictionary<string, double> idf(List<string> words)
+        {
+            Dictionary<string, int> tfWordDictionary = new Dictionary<string, int>();
+            Dictionary<string, double> tfIdfWordDictionary = new Dictionary<string, double>();
+
+            foreach (string s in words)
+            {
+                if (!tfWordDictionary.ContainsKey(s))
+                {
+                    tfWordDictionary.Add(s, 1);
+                }
+                else
+                {
+                    tfWordDictionary[s] = tfWordDictionary[s] + 1;
+                }
+            }
+
+            foreach (var v in tfWordDictionary)
+            {
+                tfIdfWordDictionary.Add(v.Key, v.Value / words.Count);
+            }
+            return tfIdfWordDictionary;
+        }
     }
 }
