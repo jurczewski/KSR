@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ArticleUtils.cs" />
     <Compile Include="DocumentReader.cs" />
+    <Compile Include="Metrics\ChebyshevMetric.cs" />
     <Compile Include="Metrics\EuclideanMetric.cs" />
     <Compile Include="Metrics\IMetric.cs" />
     <Compile Include="Metrics\ManhattanMetric.cs" />

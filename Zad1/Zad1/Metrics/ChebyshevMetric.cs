@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Zad1.Metrics
 {
-    public class EuclideanMetric : IMetric
+    public class ChebyshevMetric : IMetric
     {
         public double GetDistance(List<double> first, List<double> second)
         {
-            double distance = 0;
+            List<double> data = new List<double>();
             for (int i = 0; i < first.Count; i++)
             {
-                distance += Math.Pow(first[i] - second[i], 2);
+                data.Add(Math.Abs(first[i] - second[i]));
             }
-
-            return Math.Sqrt(distance);
+            return data.Max<double>();
         }
     }
 }
