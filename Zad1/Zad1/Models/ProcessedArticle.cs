@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Zad1.Models
 {
@@ -6,7 +7,7 @@ namespace Zad1.Models
     {
         public string label { get; set; } //place
         public List<string> StemmedWords { get; set; }
-        public List<Dictionary<string, double>> characteristicMatrix = new List<Dictionary<string, double>>();  //miasta, waluta, krainy geograficzne, 
+        public Dictionary<string, double> featureVector = new Dictionary<string, double>();
 
         public ProcessedArticle(Article article, string _label, List<string> _StemmedWords) 
         //    : base(article.Title, article.Tags, article.Words)
@@ -22,6 +23,19 @@ namespace Zad1.Models
         public List<double> getCharactaristicMatrix()
         {
             return new List<double>();
+        }
+
+        public void createFeatureVector(List<string> keywords)
+        {
+            foreach (var kw in keywords)
+            {
+                featureVector[kw] = StemmedWords.Count(t => t == kw);
+            }
+        }
+
+        public List<double> getFeatureVector()
+        {
+            return featureVector.Select(f => f.Value).ToList();
         }
     }
 }

@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Knn.cs" />
     <Compile Include="ArticleUtils.cs" />
     <Compile Include="DocumentReader.cs" />
     <Compile Include="Metrics\ChebyshevMetric.cs" />

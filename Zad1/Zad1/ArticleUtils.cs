@@ -1,10 +1,6 @@
-﻿using HtmlAgilityPack;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Zad1.Models;
-using System;
 
 namespace Zad1
 {
@@ -72,6 +68,11 @@ namespace Zad1
                 tfIdfWordDictionary.Add(v.Key, v.Value / words.Count);
             }
             return tfIdfWordDictionary;
+        }
+
+        public static List<string> getMostFrequentWords(Dictionary<string,int> dic, int count)
+        {
+            return dic.OrderByDescending(v => v.Value).Take(count).Select(k => k.Key).ToList();
         }
     }
 }
