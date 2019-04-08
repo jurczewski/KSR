@@ -11,7 +11,7 @@ namespace Zad1
             return allArticles.Where(n => n.Tags.ContainsKey(tagName) && n.Tags[tagName].Count == 1 && tags.Contains(n.Tags[tagName][0])).ToList();
         }
 
-        public static ProcessedArticle processArticle(Article article, List<string> stopList)
+        public static ProcessedArticle processArticle(Article article, List<string> stopList, string categoryName)
         {
             Stemmer stemmer = new EnglishStemmer();
             List<string> words = new List<string>();
@@ -25,7 +25,7 @@ namespace Zad1
                 stemmedWords.Add(stemmed);
             }
 
-            string label = article.Tags["places"][0];
+            string label = article.Tags[categoryName][0];
             return new ProcessedArticle(article, label, stemmedWords);
         }
 
