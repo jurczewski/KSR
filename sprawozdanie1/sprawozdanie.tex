@@ -1,6 +1,11 @@
 \documentclass{classrep}
 \usepackage[utf8]{inputenc}
 \usepackage{color}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+
+\graphicspath{{graphs}}
 
 \studycycle{Informatyka, studia dzienne, I st.}
 \coursesemester{VI}
@@ -24,44 +29,109 @@
 
 
 \section{Cel}
-{\color{blue} 
-W tej sekcji należy zamieścić zwięzły (maksymalnie dwa, trzy zdania) opis
-problemu, który był rozwiązywany (uwzględnić należy zarówno część badawczą jak
-i implementacyjną).}
+Celem zadania było stworzenie aplikacji do klasyfikacji tekstów metodą k-NN, korzystając z różnych sposób ekstrakcji wektorów cech oraz istniejących miar podobieństwa porównać kategorie do tych przypisanych przez aplikację i zbadać jakie parametry najbardziej wpływają na rozpoznwanie tekstu.
 
 \section{Wprowadzenie}
-{\color{blue}
-We wprowadzeniu należy zaprezentować całą teorię potrzebną do realizacji
-zadania (przy czym należy tu ograniczyć się wyłącznie do tego, co było
-wykorzystane) tak aby osoba, która nigdy wcześniej nie zetknęła się z tą
-tematyką, potrafiła zrozumieć dalszy opis. Część ta powinna wprowadzać
-wszystkie wykorzystywane wzory, oznaczenia itp., do których należy się
-odwoływać w dalszej części niniejszgo sprawozdania. Zamieszczony tu własny
-opis teorii (a nie skopiowany!) należy poprzeć odwołaniami bibliograficznymi
-do literatury zamieszczonej na końcu. }
+Zagadnieniem, jakim zajmowaliśmy się w ramach projektu jest klasyfikacja statystyczna, która jest rodzajem algorytmu statystycznego przydzielającego elementy do klas, bazując na cechach tych elementów. W ramach przeprowadzanego eksperymentu zaimplementowaliśmy klasyfikator k-najbliższych sąsiadów. \newline
+
+Algorytm k najbliższych sąsiadów, nazywany także algorytmem k-NN, należy do grupy algorytmów leniwych, czyli takich, które nie tworzą wewnętrznej reprezentacji danych uczących, lecz szukają rozwiązania dopiero w momencie pojawienia się wzorca testującego. Przechowuje wszystkie wzorce uczące, względem których wyznacza odległość wzorca testowego [2]. Metoda k-NN wyznacza k sąsiadów, do których badany element ma najmniejszą odległość w danej metryce, a następnie wyznacza wynik w oparciu o najczęstszy element, wśród k najbliższych. W przypadku naszego projektu odległość definiujemy jako skalę podobieństwa tekstów. \newline
+
+W ramach zadania zostały użyte 2 metody ekstrakcji cech: \newline
+\begin{itemize}
+
+\item Inverse document frequency - metoda polegająca na wyznaczeniu, czy dane słowo występuje powszechnie we wszystkich dokumentach. Jest to logarytmicznie skalowana odwrotna część dokumentów zawierających wybrane słowo (uzyskana poprzez podzielenie całkowitej liczby dokumentów przez liczbę dokumentów zawierających ten termin). Obliczana jest z poniższego wzoru:
+$$
+idf_{i}
+= \log\frac{|D|}{|\{d : t_{i} \in d\}|}
+$$
+
+\item Term frequency - metoda polegająca na zliczeniu częstości występowania danego słowa w dokumencie. Obliczana jest z poniższego wzoru:
+$$
+tf_{i,j}
+= \frac{n_{i,j}}{\sum_{k}n{k,j}}
+$$
+\end{itemize}
+
+Do obliczenia odległości tekstów posłużyliśmy się 3 metrykami: \newline
+
+\begin{itemize}
+\item metryka Euklidesowa - w celu obliczenia odległości $ d_{e}(x,y) $ między dwoma punktami $ x, y $ należy obliczyć pierwiastek kwadratowy z sumy drugich potęg różnic wartości współrzędnych o tych samych indeksach, zgodnie ze wzorem:
+$$
+d_{e}(x,y)= \sqrt{ (y_{1} - x_{1})^2 + \cdots + (y_{n} - x_{n})^2 }
+$$
+
+\item metryka uliczna (Manhattan, miejska) - w celu obliczenia odległości $ d_{e}(x,y) $ między dwoma punktami $ x, y $ należy obliczyć sumę wartości bezwzględnych różnic współrzędnych punktów $ x $ oraz $ y $, zgodnie ze wzorem:
+$$
+d_{m}(x,y)= \sum_{k=1}^{n} | x_{k} - y_{k} |
+$$
+
+\item metryka Czebyszewa - w celu obliczenia odległości $ d_{e}(x,y) $ między dwoma punktami $ x, y $ należy obliczyć maksymalną wartość bezwzględnych różnic współrzędnych punktów $ x $ oraz $ y $, zgodnie ze wzorem:
+$$
+d_{ch}(x,y)= \max_{i} |x_{i} - y_{i}|
+$$
+\newline
+\end{itemize}
 
 \section{Opis implementacji}
-{\color{blue}
-Należy tu zamieścić krótki i zwięzły opis zaprojektowanych klas oraz powiązań
-między nimi. Powinien się tu również znaleźć diagram UML  (diagram klas)
-prezentujący najistotniejsze elementy stworzonej aplikacji. Należy także
-podać, w jakim języku programowania została stworzona aplikacja. }
+Program został w całosci stworzony w języku C\# (.NET Framework, v4.6.1). 
+
+W programie znajdują się następujące klasy:
+\begin{itemize}[label=$\bullet$]
+\item DocumentReader - klasa odpowiedzialna
+\item Knn - implementacja algorytmu K-nn
+\item Program - klasa główna
+\item ArticleUtilis - klasa pomocnicza
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/uml1.png}
+	\caption{Diagram UML wygenerowany dla klas ogólnych.}
+\end{figure}
+
+\item IMetric - interfejs dla metryk, klasy implementujące owy interfejs:
+\begin{itemize}
+\item ChebyshewMetric -  klasa odpowiedzialna za metrykę Czebyszewa
+\item ManhatattanMetric -  klasa odpowiedzialna za metrykę uliczną
+\item EuclideanMetric - klasa odpowiedzialna za metrykę euklidesową\\
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/uml2.png}
+	\caption{Diagram UML wygenerowany dla klas dotyczących metryk. }
+\end{figure}
+
+\item IStemmer - interfejs reprezentujący stemmer
+\item Stemmer - reprezentacja stemera
+\item EnglishStemer - stemer dla języka angielskiego
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/uml3.png}
+	\caption{Diagram UML wygenerowany dla klas dotyczących procesu stemizacji.}
+\end{figure}
+
+\item Article - klasa reprezentująca pojedyńczy artykuł
+\item ProcessedArticle - klasa dziecicząca po Article, reprezentuje przetworzony artykuł
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/uml4.png}
+	\caption{Diagram UML wygenerowany dla klas reprezentujących artykuły.}
+\end{figure}
 
 \section{Materiały i metody}
-{\color{blue}
-W tym miejscu należy opisać, jak przeprowadzone zostały wszystkie badania,
-których wyniki i dyskusja zamieszczane są w dalszych sekcjach. Opis ten
-powinien być na tyle dokładny, aby osoba czytająca go potrafiła wszystkie
-przeprowadzone badania samodzielnie powtórzyć w celu zweryfikowania ich
-poprawności (a zatem m.in. należy zamieścić tu opis architektury sieci,
-wartości współczynników użytych w kolejnych eksperymentach, sposób
-inicjalizacji wag, metodę uczenia itp. oraz informacje o danych, na których
-prowadzone były badania). Przy opisie należy odwoływać się i stosować do
-opisanych w sekcji drugiej wzorów i oznaczeń, a także w jasny sposób opisać
-cel konkretnego testu. Najlepiej byłoby wyraźnie wyszczególnić (ponumerować)
-poszczególne eksperymenty tak, aby łatwo było się do nich odwoływać dalej.}
+Klasyfikacja tekstów została wykonana wszystkimi dostępnymi metodami ekstrakcji cech dla wszystkich trzech metryk. Dla każdego przypadku testowego dokonano klasyfikacji tekstu dla k $\in$ \{2, 3, 5, 7, 10, 15, 20\} najbliższych sąsiadów. Wyniki porównano z faktyczną etykietą danego artykułu. \newline
+
+Klasyfikacja dotycząca lokalizacji przeprowadzana była jedynie na danych, których pole places przyjmowało jedną z wartości: west-germany, usa, france, uk, canada, japan. Zbiór treningowy stanowił 60\% artykułów, zaś zbiór testowy 40\% artykułów. \newline
+
+Klasyfikacja dotycząca tematów przeprowadzana była jedynie na danych, które pole topics przyjmowało jedną z wartości: gold, cocoa, sugar, coffe, grain. Zbiory testowe stanowiły 60\% artykułów. \newline
+
+%Danymi jakie sami przygotowaliśmy do analizy były teksty piosenek znanych artystów. Posiadały one jedną kategorię - author. Przyjmowało ono jedną z wartości: taylor swift, macklemore, twenty one pilots, eminem, ed sheeran, black eyed peas. Zbiór treningowy stanowił 60\% tekstów, zaś zbiór testowy 40\% tekstów.
 
 \section{Wyniki}
+
 {\color{blue}
 W tej sekcji należy zaprezentować, dla każdego przeprowadzonego eksperymentu,
 kompletny zestaw wyników w postaci tabel, wykresów itp. Powinny być one tak
