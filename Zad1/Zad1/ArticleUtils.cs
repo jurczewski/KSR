@@ -74,5 +74,10 @@ namespace Zad1
         {
             return dic.OrderByDescending(v => v.Value).Take(count).Select(k => k.Key).ToList();
         }
+
+        public static List<string> getMostFrequentWords(Dictionary<string, double> dic, int count)
+        {
+            return dic.OrderByDescending(v => v.Value).Take(count).Select(k => k.Key).ToList();
+        }
     }
 }

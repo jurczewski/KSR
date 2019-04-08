@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Zad1.Metrics;
@@ -9,7 +10,7 @@ namespace Zad1
 {
     public class Program
     {
-        private static void Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm)
+        private static double Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm)
         {
             List<Article> allArticles = new DocumentReader().ObtainVectorSpaceModels().ToList();
             List<Article> validArticles = ArticleUtils.GetArticlesWithValidTags(allArticles, CategoryName, validTerms);
@@ -60,7 +61,7 @@ namespace Zad1
                 }
                 if (whichAlgorithm)
                 {
-                    //keyWords.AddRange(ArticleUtils.getMostFrequentWords(ArticleUtils.idf(words), 20));
+                    keyWords.AddRange(ArticleUtils.getMostFrequentWords(ArticleUtils.idf(words), 20));
                 }
                 else
                 {
@@ -91,15 +92,18 @@ namespace Zad1
                 }
             }
 
-            Console.WriteLine($"For k = {k}, category: {CategoryName}, metric: {metric.GetType().Name} ,  correct are: {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
+            //Console.WriteLine($"For k = {k}, category: {CategoryName}, metric: {metric.GetType().Name} , correct are: {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
+            //File.AppendAllText(@"C:\Users\Bartosz\Desktop", $"{k} & {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
             int[][] confusionMatrix = Results.createConfusionMatrix(validTerms, processedTestArticles);
 
-            Results.printConfusionMatrix(confusionMatrix, validTerms);
-            Console.WriteLine();
+            //Results.printConfusionMatrix(confusionMatrix, validTerms);
+            //Console.WriteLine();
+            return ((float)correctNumber / (float)processedTestArticles.Count()) * 100;
         }
 
         private static readonly string CategoryNamePlaces = "places";
         private static readonly string CategoryNameTopics = "topics";
+        private static readonly string CategoryNameMedium = "title";
 
         static void Main(string[] args)
         {
@@ -122,26 +126,47 @@ namespace Zad1
                 "grain"
             };
 
+            List<string> validMedium = new List<string>
+            {
+                "biology",
+                "love"
+            };
+
             double trainingToTestDataRatio = 0.6;
             int stopListWordNumber = 100;
+            bool IdfOn = true;
 
             int[] ks = { 2, 3, 5, 7, 10, 15, 20 };
-
+            
+            IMetric metric = new EuclideanMetric();
             for (var i = 0; i < ks.Count(); i++)
             {
-                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
+                Console.WriteLine(i);
+                double p = Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn);
+                double t = Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn);
+                double b = Run(validPlaces, CategoryNameMedium, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn);
+                File.AppendAllText(@"C:\Users\Bartosz\Desktop\IDF_Euclidean.txt", $"{i} & {p} & {t} & {b}\n");
             }
-
-            for (var i = 0; i < ks.Count(); i++)
-            {
-                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
-            }
+            //metric = new ChebyshevMetric();
+            //for (var i = 0; i < ks.Count(); i++)
+            //{
+            //    double p = Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn);
+            //    double t = Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn);
+            //    //double b = Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn);
+            //    File.AppendAllText(@"C:\Users\Bartosz\Desktop\IDF_Chebyshev.txt", $"{i} & {p} & {t}\n");
+            //}
+            //metric = new ManhattanMetric();
+            //for (var i = 0; i < ks.Count(); i++)
+            //{
+            //    double p = Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn);
+            //    double t = Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn);
+            //    //double b = Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn);
+            //    File.AppendAllText(@"C:\Users\Bartosz\Desktop\IDF_Manhattan.txt", $"{i} & {p} & {t}\n");
+            //}
 
             Console.ReadKey();
         }
+
+        
     }
 }
