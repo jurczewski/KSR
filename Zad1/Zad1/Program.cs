@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Zad1.Metrics;
 using Zad1.Models;
 
@@ -82,7 +83,7 @@ namespace Zad1
             foreach (var a in processedTestArticles)
             {
                 string guessed = Knn.guesLabel(metric, k, processedTrainingArticles, a);
-
+                a.guessedLabel = guessed;
                 //string log = $"Guessed: { guessed} should be: { a.label}";
                 if (guessed == a.label)
                 {
@@ -91,6 +92,10 @@ namespace Zad1
             }
 
             Console.WriteLine($"For k = {k}, category: {CategoryName}, metric: {metric.GetType().Name} ,  correct are: {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
+            int[][] confusionMatrix = Results.createConfusionMatrix(validTerms, processedTestArticles);
+
+            Results.printConfusionMatrix(confusionMatrix, validTerms);
+            Console.WriteLine();
         }
 
         private static readonly string CategoryNamePlaces = "places";
@@ -100,12 +105,12 @@ namespace Zad1
         {
             List<string> validPlaces = new List<string>
             {
-                "west-germany",
                 "usa",
                 "france",
                 "uk",
                 "canada",
-                "japan"
+                "japan",
+                "west-germany"
             };
 
             List<string> validTopics = new List<string>

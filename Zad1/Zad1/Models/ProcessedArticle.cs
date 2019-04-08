@@ -6,6 +6,7 @@ namespace Zad1.Models
     public class ProcessedArticle : Article
     {
         public string label { get; set; } //place
+        public string guessedLabel { get; set; }
         public List<string> StemmedWords { get; set; }
         public Dictionary<string, double> featureVector = new Dictionary<string, double>();
 
