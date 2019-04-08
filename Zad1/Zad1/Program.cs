@@ -45,7 +45,7 @@ namespace Zad1
 
             foreach (Article a in trainingArticles)
             {
-                processedTrainingArticles.Add(ArticleUtils.processArticle(a, stopList));
+                processedTrainingArticles.Add(ArticleUtils.processArticle(a, stopList, CategoryName));
             }
 
             List<string> keyWords = new List<string>();
@@ -73,7 +73,7 @@ namespace Zad1
             List<ProcessedArticle> processedTestArticles = new List<ProcessedArticle>();
             foreach (Article a in testArticles)
             {
-                processedTestArticles.Add(ArticleUtils.processArticle(a, stopList));
+                processedTestArticles.Add(ArticleUtils.processArticle(a, stopList, CategoryName));
             }
 
             processedTestArticles.ForEach(a => a.createFeatureVector(keyWords));
@@ -90,7 +90,7 @@ namespace Zad1
                 }
             }
 
-            Console.WriteLine($"For k = {k}, category: {CategoryName}, correct are: {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
+            Console.WriteLine($"For k = {k}, category: {CategoryName}, metric: {metric.GetType().Name} ,  correct are: {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
         }
 
         private static readonly string CategoryNamePlaces = "places";
@@ -124,9 +124,16 @@ namespace Zad1
 
             for (var i = 0; i < ks.Count(); i++)
             {
-                Program.Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-                Program.Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-                Program.Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
+                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
+                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
+                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
+            }
+
+            for (var i = 0; i < ks.Count(); i++)
+            {
+                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
+                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
+                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
             }
 
             Console.ReadKey();
