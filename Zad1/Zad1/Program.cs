@@ -100,6 +100,7 @@ namespace Zad1
 
         private static readonly string CategoryNamePlaces = "places";
         private static readonly string CategoryNameTopics = "topics";
+        private static readonly string CategoryNameName = "name";
 
         static void Main(string[] args)
         {
@@ -122,23 +123,37 @@ namespace Zad1
                 "grain"
             };
 
+            List<string> validCustom = new List<string>
+            {
+                "movie",
+                "book"
+            };
+
             double trainingToTestDataRatio = 0.6;
-            int stopListWordNumber = 100;
+            int stopListWordNumber = 1;
 
             int[] ks = { 2, 3, 5, 7, 10, 15, 20 };
 
-            for (var i = 0; i < ks.Count(); i++)
-            {
-                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
-            }
+            //for (var i = 0; i < ks.Count(); i++)
+            //{
+            //    Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
+            //    Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
+            //    Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
+            //}
+
+            //for (var i = 0; i < ks.Count(); i++)
+            //{
+            //    Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
+            //    Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
+            //    Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
+            //}
+
 
             for (var i = 0; i < ks.Count(); i++)
             {
-                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
+                Run(validCustom, CategoryNameName, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
+                Run(validCustom, CategoryNameName, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
+                Run(validCustom, CategoryNameName, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
             }
 
             Console.ReadKey();
