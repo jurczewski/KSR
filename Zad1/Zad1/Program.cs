@@ -11,7 +11,7 @@ namespace Zad1
     {
         private static void Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm)
         {
-            List<Article> allArticles = new DocumentReader().ObtainVectorSpaceModels().ToList();
+            List<Article> allArticles = new CustomReader().ObtainVectorSpaceModels().ToList();
             List<Article> validArticles = ArticleUtils.GetArticlesWithValidTags(allArticles, CategoryName, validTerms);
             int trainingArticleNumber = Convert.ToInt32(trainingToTestDataRatio * validArticles.Count);
             List<Article> trainingArticles = validArticles.Take(trainingArticleNumber).ToList();
@@ -92,9 +92,9 @@ namespace Zad1
             }
 
             Console.WriteLine($"For k = {k}, category: {CategoryName}, metric: {metric.GetType().Name} ,  correct are: {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
-            int[][] confusionMatrix = Results.createConfusionMatrix(validTerms, processedTestArticles);
-
-            Results.printConfusionMatrix(confusionMatrix, validTerms);
+            Results result = new Results();
+            result.createConfusionMatrix(validTerms, processedTestArticles);
+            result.printConfusionMatrix();
             Console.WriteLine();
         }
 

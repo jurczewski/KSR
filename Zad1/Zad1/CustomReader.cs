@@ -7,13 +7,13 @@ using Zad1.Models;
 
 namespace Zad1
 {
-    public class DocumentReader
+    public class CustomReader
     {
         public IEnumerable<Article> ObtainVectorSpaceModels()
         {
             for (int i = 0; i < 1; i++)
             {
-                var rawXml = File.ReadAllText($"../../Data/custom/reut2-{i.ToString().PadLeft(3, '0')}.sgm");
+                var rawXml = File.ReadAllText($"../../Data/custom/ours.sgm");
                 var doc = new HtmlDocument();
                 doc.LoadHtml(rawXml);
                 var regex = new Regex("[^a-zA-Z]");
