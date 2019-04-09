@@ -7,7 +7,7 @@ using Zad1.Models;
 
 namespace Zad1
 {
-    public class CustomReader
+    public class CustomReader : IReader
     {
         public IEnumerable<Article> ObtainVectorSpaceModels()
         {

@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomReader.cs" />
+    <Compile Include="IReader.cs" />
     <Compile Include="Results.cs" />
     <Compile Include="Knn.cs" />
     <Compile Include="ArticleUtils.cs" />

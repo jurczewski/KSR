@@ -10,9 +10,9 @@ namespace Zad1
 {
     public class Program
     {
-        private static void Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm)
+        private static double Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm, IReader reader)
         {
-            List<Article> allArticles = new CustomReader().ObtainVectorSpaceModels().ToList();
+            List<Article> allArticles = reader.ObtainVectorSpaceModels().ToList();
             allArticles = allArticles.OrderBy(a => Guid.NewGuid()).ToList();
             List<Article> validArticles = ArticleUtils.GetArticlesWithValidTags(allArticles, CategoryName, validTerms);
             int trainingArticleNumber = Convert.ToInt32(trainingToTestDataRatio * validArticles.Count);
@@ -92,20 +92,20 @@ namespace Zad1
                 }
             }
 
-            Console.WriteLine($"For k = {k}, category: {CategoryName}, metric: {metric.GetType().Name} ,  correct are: {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
-            Results result = new Results();
-            result.createConfusionMatrix(validTerms, processedTestArticles);
-            result.printConfusionMatrix();
-            Console.WriteLine();
+            //Console.WriteLine($"For k = {k}, category: {CategoryName}, metric: {metric.GetType().Name} ,  correct are: {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
+            //Results result = new Results();
+            //result.createConfusionMatrix(validTerms, processedTestArticles);
+            //result.printConfusionMatrix();
+            //Console.WriteLine();
+
+            return ((float)correctNumber / processedTestArticles.Count()) * 100;
         }
 
         private static readonly string CategoryNamePlaces = "places";
         private static readonly string CategoryNameTopics = "topics";
         private static readonly string CategoryNameMedium = "name";
 
-        static void Main(string[] args)
-        {
-            List<string> validPlaces = new List<string>
+        private static readonly List<string> validPlaces = new List<string>
             {
                 "usa",
                 "france",
@@ -115,7 +115,7 @@ namespace Zad1
                 "west-germany"
             };
 
-            List<string> validTopics = new List<string>
+        private static readonly List<string> validTopics = new List<string>
             {
                 "gold",
                 "cocoa",
@@ -124,40 +124,41 @@ namespace Zad1
                 "grain"
             };
 
-            List<string> validNames = new List<string>
+        private static readonly List<string> validNames = new List<string>
             {
                 "movie",
                 "book"
             };
 
+        static void Main(string[] args)
+        {
             double trainingToTestDataRatio = 0.6;
-            int stopListWordNumber = 20;
+            int stopListWordNumber = 100;
+            bool IdfOn = true;
 
-            int[] ks = { 2, 3, 5, 7, 10, 15, 20 };
-
-            //for (var i = 0; i < ks.Count(); i++)
-            //{
-            //    Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-            //    Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-            //    Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
-            //}
-
-            //for (var i = 0; i < ks.Count(); i++)
-            //{
-            //    Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-            //    Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-            //    Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
-            //}
-            for (var i = 0; i < ks.Count(); i++)
-            {
-                Run(validNames, CategoryNameMedium, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-                Run(validNames, CategoryNameMedium, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-                Run(validNames, CategoryNameMedium, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
-            }
-
+            IMetric metric = new EuclideanMetric();
+            RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
             Console.ReadKey();
         }
 
-        
+        private static void RunFor3Sets(double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, bool IdfOn)
+        {
+            int[] ks = { 2, 3, 5, 7, 10, 15, 20 };
+
+            string algo = "";
+            if (IdfOn) algo = "IDF";
+            else algo = "TF";
+
+            for (var i = 0; i < ks.Count(); i++)
+            {
+                Console.WriteLine(i);
+                double p = Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new DocumentReader());
+                double t = Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new DocumentReader());
+                double m = Run(validPlaces, CategoryNameMedium, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new CustomReader());
+                File.AppendAllText($@"C:\Users\Bartosz\Desktop\{algo}_{metric.GetType().Name}.txt", $"{i} & {p} & {t} & {m}\n");
+            }
+        }
     }
 }
