@@ -13,7 +13,7 @@ namespace Zad1
         {
             for (int i = 0; i < 1; i++)
             {
-                var rawXml = File.ReadAllText($"../../Data/custom/ours.sgm");
+                var rawXml = File.ReadAllText($"../../Data/ours.sgm");
                 var doc = new HtmlDocument();
                 doc.LoadHtml(rawXml);
                 var regex = new Regex("[^a-zA-Z]");
