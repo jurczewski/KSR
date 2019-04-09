@@ -10,14 +10,14 @@ namespace Zad1
 {
     public class Program
     {
-        private static double Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm)
+        private static void Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm)
         {
             List<Article> allArticles = new CustomReader().ObtainVectorSpaceModels().ToList();
+            allArticles = allArticles.OrderBy(a => Guid.NewGuid()).ToList();
             List<Article> validArticles = ArticleUtils.GetArticlesWithValidTags(allArticles, CategoryName, validTerms);
             int trainingArticleNumber = Convert.ToInt32(trainingToTestDataRatio * validArticles.Count);
             List<Article> trainingArticles = validArticles.Take(trainingArticleNumber).ToList();
             List<Article> testArticles = validArticles.Skip(trainingArticleNumber).ToList();
-
 
             Dictionary<string, int> allWords = new Dictionary<string, int>();
             foreach (Article article in trainingArticles)
@@ -101,7 +101,7 @@ namespace Zad1
 
         private static readonly string CategoryNamePlaces = "places";
         private static readonly string CategoryNameTopics = "topics";
-        private static readonly string CategoryNameMedium = "title";
+        private static readonly string CategoryNameMedium = "name";
 
         static void Main(string[] args)
         {
@@ -124,23 +124,35 @@ namespace Zad1
                 "grain"
             };
 
+            List<string> validNames = new List<string>
+            {
+                "movie",
+                "book"
+            };
+
             double trainingToTestDataRatio = 0.6;
-            int stopListWordNumber = 100;
+            int stopListWordNumber = 20;
 
             int[] ks = { 2, 3, 5, 7, 10, 15, 20 };
 
-            for (var i = 0; i < ks.Count(); i++)
-            {
-                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-                Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
-            }
+            //for (var i = 0; i < ks.Count(); i++)
+            //{
+            //    Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
+            //    Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
+            //    Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
+            //}
 
+            //for (var i = 0; i < ks.Count(); i++)
+            //{
+            //    Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
+            //    Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
+            //    Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
+            //}
             for (var i = 0; i < ks.Count(); i++)
             {
-                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
-                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
-                Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
+                Run(validNames, CategoryNameMedium, trainingToTestDataRatio, stopListWordNumber, new EuclideanMetric(), ks[i], false);
+                Run(validNames, CategoryNameMedium, trainingToTestDataRatio, stopListWordNumber, new ChebyshevMetric(), ks[i], false);
+                Run(validNames, CategoryNameMedium, trainingToTestDataRatio, stopListWordNumber, new ManhattanMetric(), ks[i], false);
             }
 
             Console.ReadKey();
