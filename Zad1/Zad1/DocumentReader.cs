@@ -11,7 +11,7 @@ namespace Zad1
     {
         public IEnumerable<Article> ObtainVectorSpaceModels()
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 7; i++)
             {
                 var rawXml = File.ReadAllText($"../../Data/reut2-{i.ToString().PadLeft(3, '0')}.sgm");
                 var doc = new HtmlDocument();
@@ -34,7 +34,7 @@ namespace Zad1
                             Words = regex.Replace(body.InnerText, " ").ToLower().Split(' ').Where(s => s.Length > 2)
                                 .ToList(),
                             Tags = tags,
-                            Title = article.Descendants("NAME").First().InnerText
+                            Title = article.Descendants("TITLE").First().InnerText
                         };
                     }
                 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Zad1.Metrics;
 using Zad1.Models;
 
@@ -13,7 +12,7 @@ namespace Zad1
         private static double Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm, IReader reader)
         {
             List<Article> allArticles = reader.ObtainVectorSpaceModels().ToList();
-            allArticles = allArticles.OrderBy(a => Guid.NewGuid()).ToList();
+            if (reader.GetType().Name == "CustomReader") allArticles = allArticles.OrderBy(a => Guid.NewGuid()).ToList();
             List<Article> validArticles = ArticleUtils.GetArticlesWithValidTags(allArticles, CategoryName, validTerms);
             int trainingArticleNumber = Convert.ToInt32(trainingToTestDataRatio * validArticles.Count);
             List<Article> trainingArticles = validArticles.Take(trainingArticleNumber).ToList();
@@ -137,9 +136,39 @@ namespace Zad1
             bool IdfOn = true;
 
             IMetric metric = new EuclideanMetric();
+            Console.WriteLine(metric.GetType().Name);
             RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
+            Console.WriteLine(metric.GetType().Name);
+            metric = new ChebyshevMetric();
+            RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
+            Console.WriteLine(metric.GetType().Name);
+            metric = new ManhattanMetric();
+            RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
+
+            IdfOn = false;
+
+            metric = new EuclideanMetric();
+            Console.WriteLine(metric.GetType().Name);
+            RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
+            Console.WriteLine(metric.GetType().Name);
+            metric = new ChebyshevMetric();
+            RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
+            Console.WriteLine(metric.GetType().Name);
+            metric = new ManhattanMetric();
+            RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
+            RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
+
             Console.ReadKey();
         }
 
@@ -153,11 +182,11 @@ namespace Zad1
 
             for (var i = 0; i < ks.Count(); i++)
             {
-                Console.WriteLine(i);
-                double p = Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new DocumentReader());
-                double t = Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new DocumentReader());
-                double m = Run(validPlaces, CategoryNameMedium, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new CustomReader());
-                File.AppendAllText($@"C:\Users\Bartosz\Desktop\{algo}_{metric.GetType().Name}.txt", $"{i} & {p} & {t} & {m}\n");
+                Console.WriteLine(ks[i]);
+                double p = Math.Round(Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new DocumentReader()), 1);
+                double t = Math.Round(Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new DocumentReader()),1);
+                double m = Math.Round(Run(validNames, CategoryNameMedium, trainingToTestDataRatio, 20, metric, ks[i], IdfOn, new CustomReader()),1);
+                File.AppendAllText($@"C:\Users\Bartosz\Desktop\{algo}_{metric.GetType().Name}.txt", $"{ks[i]} & {p} & {t} & {m} \\\\ \n");
             }
         }
     }

@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Zad1.ArticleUtils">
-    <Position X="11.5" Y="9.5" Width="2" />
+    <Position X="9.75" Y="10" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAEAAAAAABAAAFAAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
       <FileName>ArticleUtils.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Zad1.DocumentReader">
-    <Position X="8.5" Y="8" Width="2.25" />
+    <Position X="14.75" Y="9.75" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>DocumentReader.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Zad1.EnglishStemmer">
     <Position X="1.75" Y="2.75" Width="1.75" />
@@ -22,72 +23,50 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Zad1.Knn">
-    <Position X="11" Y="8" Width="2.5" />
+    <Position X="7" Y="11" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
       <FileName>Knn.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Zad1.Program">
-    <Position X="8.5" Y="9.5" Width="2.75" />
+    <Position X="9.75" Y="7" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAABAAAAAI=</HashCode>
+      <HashCode>ABAIAAAAAAAAAAAAAACAAAAAAgAAAIACIAAABAAAAAI=</HashCode>
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Zad1.Stemmer">
     <Position X="4" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAECAAAAAAAAARAIAAQAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAECAAAAAAAAARAAAAQAA=</HashCode>
       <FileName>Stemmer.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="IStemmer" />
-    </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="Zad1.Metrics.ChebyshevMetric" BaseTypeListCollapsed="true">
     <Position X="10.75" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAABAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Metrics\ChebyshevMetric.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="IMetric" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Zad1.Metrics.EuclideanMetric" BaseTypeListCollapsed="true">
     <Position X="14.25" Y="4.5" Width="1.5" />
-    <AssociationLine Name="IMetric" Type="Zad1.Metrics.IMetric" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="14.844" Y="4.5" />
-        <Point X="14.844" Y="3.114" />
-        <Point X="14" Y="3.114" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="0.266" Y="0.06" Height="0.182" Width="0.512" />
-      </MemberNameLabel>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAABAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Metrics\EuclideanMetric.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="IMetric" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Zad1.Metrics.ManhattanMetric" BaseTypeListCollapsed="true">
     <Position X="12.5" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAABAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Metrics\ManhattanMetric.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="IMetric" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.256" Collapsed="true" />
+    <Lollipop Position="0.256" />
   </Class>
   <Class Name="Zad1.Models.Article">
     <Position X="20" Y="4.75" Width="1.5" />
@@ -99,9 +78,24 @@
   <Class Name="Zad1.Models.ProcessedArticle">
     <Position X="17.5" Y="4" Width="2" />
     <TypeIdentifier>
-      <HashCode>BAAAAAAAAAAAABgAAARAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <HashCode>BAAAAAACAAAAABgAAARAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
       <FileName>Models\ProcessedArticle.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="Zad1.Results">
+    <Position X="7" Y="7" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ACQAAAACAAIAAFBAAAAUAAAgAAAAAAAAAAgDAAAAAAA=</HashCode>
+      <FileName>Results.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Zad1.CustomReader">
+    <Position X="17.25" Y="9.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CustomReader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Interface Name="Zad1.IStemmer">
     <Position X="6" Y="3.5" Width="2" />
@@ -115,6 +109,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Metrics\IMetric.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Zad1.IReader">
+    <Position X="14.75" Y="8" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IReader.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />
