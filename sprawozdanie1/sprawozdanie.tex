@@ -30,10 +30,10 @@
 
 \section{Cel}
 Celem zadania było stworzenie aplikacji do klasyfikacji tekstów metodą k-NN, korzystając z różnych sposobów ekstrakcji wektorów cech i metryk.
-Dodatkowo przeanalizowanie dla jakich parametórw program ma największą skutecznosć.
+Dodatkowo przeanalizowanie dla jakich parametrów program ma największą skuteczność.
 
 \section{Wprowadzenie}
-Zagadnieniem, w okół którego skupiona jest nasza aplikacja jest klasyfikacja statystyczna, która jest rodzajem algorytmu statystycznego przydzielającego elementy do klas, bazując na cechach owych elementów. W ramach przeprowadzanego eksperymentu zaimplementowaliśmy klasyfikator k-najbliższych sąsiadów. \newline
+Zagadnieniem, wokół którego skupiona jest nasza aplikacja jest klasyfikacja statystyczna, która jest rodzajem algorytmu statystycznego przydzielającego elementy do klas, bazując na cechach owych elementów. W ramach przeprowadzanego eksperymentu zaimplementowaliśmy klasyfikator k-najbliższych sąsiadów. \newline
 
 Algorytm k najbliższych sąsiadów, nazywany także algorytmem k-NN, należy do grupy algorytmów leniwych, czyli takich, które nie tworzą wewnętrznej reprezentacji danych uczących, lecz szukają rozwiązania dopiero w momencie pojawienia się wzorca testującego. Przechowuje wszystkie wzorce uczące, względem których wyznacza odległość wzorca testowego [2]. Metoda k-NN wyznacza k sąsiadów, do których badany element ma najmniejszą odległość w danej metryce, a następnie wyznacza wynik w oparciu o najczęstszy element, wśród k najbliższych. W przypadku naszego projektu odległość definiujemy jako skalę podobieństwa tekstów. \newline
 
@@ -74,7 +74,7 @@ $$
 \end{itemize}
 
 \section{Opis implementacji}
-Program został w całosci stworzony w języku C\# (.NET Framework, v4.6.1). 
+Program został w całości stworzony w języku C\# (.NET Framework, v4.6.1). 
 
 W programie znajdują się następujące klasy:
 \begin{itemize}[label=$\bullet$]
@@ -113,7 +113,7 @@ W programie znajdują się następujące klasy:
 \end{figure}
 
 \item Article - klasa reprezentująca pojedyńczy artykuł
-\item ProcessedArticle - klasa dziecicząca po Article, reprezentuje przetworzony artykuł
+\item ProcessedArticle - klasa dziedzicząca po Article, reprezentuje przetworzony artykuł
 
 
 \begin{figure}[H]
@@ -124,7 +124,7 @@ W programie znajdują się następujące klasy:
 
 \item IReader - interfejs dla klas wczytujących dane, klasy implementujące owy interfejs:
 \begin{itemize}
-\item DocumentReader -  klasa odpowiedzialna za wczytanie plików z zestwu \cite{data}
+\item DocumentReader -  klasa odpowiedzialna za wczytanie plików z zestawu \cite{data}
 \item CustomReader -  klasa odpowiedzialna za wczytanie plików z przygotowanego przez nas zestawu \cite{our}
 \end{itemize}
 \end{itemize}
@@ -132,7 +132,7 @@ W programie znajdują się następujące klasy:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{/uml5.png}
-	\caption{Diagram UML wygenerowany dla klas wczytaujących dane.}
+	\caption{Diagram UML wygenerowany dla klas wczytujących dane.}
 \end{figure}
 
 \section{Materiały i metody}
@@ -150,7 +150,7 @@ Klasyfikacja dotycząca lokalizacji przeprowadzana była jedynie na danych, któ
 
 Klasyfikacja dotycząca tematów przeprowadzana była jedynie na danych, które pole topics przyjmowało jedną z wartości: gold, cocoa, sugar, coffe, grain.\newline
 
-Danymi jakimi przygotowalimy do analizy były opisy dzieł kultury. Posiadały one jedną kategorię - medium. Pole przyjmowało wartosć: book lub movie.
+Dane które przygotowaliśmy do analizy były opisy dzieł kultury. Posiadały one jedną kategorię - medium. Pole przyjmowało wartość: book lub movie.
 \section{Wyniki}
 \subsection{Term frequency}
 %%%%%%
@@ -338,7 +338,9 @@ Danymi jakimi przygotowalimy do analizy były opisy dzieł kultury. Posiadały o
 
 
 \subsection{Term frequency - podsumowanie wykresami}
+
 %%%PLACES
+\subsubsection{Places}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{/results/TF_20_places.png}
@@ -355,6 +357,7 @@ Danymi jakimi przygotowalimy do analizy były opisy dzieł kultury. Posiadały o
 	\caption{Dane z tabel 1-9 dla kategorii places, zbiór treningowy 80\%, zbiór testowy 20\%}
 \end{figure}
 %%%Topics
+\subsubsection{Topics}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{/results/TF_20_topics.png}
@@ -371,6 +374,7 @@ Danymi jakimi przygotowalimy do analizy były opisy dzieł kultury. Posiadały o
 	\caption{Dane z tabel 1-9 dla kategorii topics, zbiór treningowy 80\%, zbiór testowy 20\%}
 \end{figure}
 %%%MEDIUM
+\subsubsection{Medium}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{/results/TF_20_medium.png}
@@ -578,6 +582,7 @@ Danymi jakimi przygotowalimy do analizy były opisy dzieł kultury. Posiadały o
 
 \subsection{Inverse document frequency - podsumowanie wykresami}
 %%%PLACES
+\subsubsection{Places}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{/results/IDF_20_places.png}
@@ -594,6 +599,7 @@ Danymi jakimi przygotowalimy do analizy były opisy dzieł kultury. Posiadały o
 	\caption{Dane z tabel 1-9 dla kategorii places, zbiór treningowy 80\%, zbiór testowy 20\%}
 \end{figure}
 %%%Topics
+\subsubsection{Topics}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{/results/IDF_20_topics.png}
@@ -610,6 +616,7 @@ Danymi jakimi przygotowalimy do analizy były opisy dzieł kultury. Posiadały o
 	\caption{Dane z tabel 1-9 dla kategorii topics, zbiór treningowy 80\%, zbiór testowy 20\%}
 \end{figure}
 %%%MEDIUM
+\subsubsection{Medium}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{/results/IDF_20_medium.png}
@@ -626,24 +633,42 @@ Danymi jakimi przygotowalimy do analizy były opisy dzieł kultury. Posiadały o
 	\caption{Dane z tabel 1-9 dla kategorii medium, zbiór treningowy 80\%, zbiór testowy 20\%}
 \end{figure}
 
+\subsection{Najlepsze wyniki}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{k} & \textbf{data} & \textbf{metryka} &  \textbf{skuteczność [\%]} & \textbf{metoda} \\ [0.5ex] 
+		\hline
+		\hline 
+			3 & medium & uliczna  & 90 & TF \\
+			7 & places & euklidesowa  & 87 & TF \\
+			3 & places & euklidesowa  & 83,8 & IDF \\
+			5 & places & Czebyszewa  & 83,8 & IDF \\
+			5 & places & uliczna & 83,4 & IDF \\
+		\hline
+	\end{tabular}
+	\caption{Największa otrzymana przez nas skuteczność}
+\end{table}
+
 \section{Dyskusja}
 
+Jako cel przeprowadzonych eksperymentów obraliśmy ustalenie jak dobrane parametry naszego algorytmu będą wpływały na skuteczność. 
+Rozważania należy zacząć od wyboru metody ekstrakcji cech. Według naszych spostrzeżeń obie metody sprawdzały się równie dobrze, a drobne różnica w otrzymanej skuteczności wynikały z doboru stosunku zbioru treningowego do zbioru testowego. Wszystkie przetestowane przez nas metryki wykazały się wymierną poprawnością, jednakże fluktuacje wyników między poszczególnymi iteracjami wynikały bezpośrednio z doboru liczby sąsiadów (K) i danego zbioru danych na którym odbywał się eksperyment. \newline
 
+Dla tagu 'place' bezapelacyjnym zwycięzcą okazała się metryka Euklidesowa zawsze osiągająca wyższe rezultaty niż inne metryki. Jej dominacja była niezależne od doboru liczby sąsiadów. Niedotrenowanie lub przetrenowanie klasyfikatora skutkowało w mniejszej skuteczności. Najlepsze wyniki otrzymaliśmy dla K oscylującego wokół 5.\newline
 
-{\color{blue}
-Sekcja ta powinna zawierać dokładną interpretację uzyskanych wyników
-eksperymentów wraz ze szczegółowymi wnioskami z nich płynącymi. Najcenniejsze
-są, rzecz jasna, wnioski o charakterze uniwersalnym, które mogą być istotne
-przy innych, podobnych zadaniach. Należy również omówić i wyjaśnić wszystkie
-napotakane problemy (jeśli takie były). Każdy wniosek powinien mieć poparcie
-we wcześniej przeprowadzonych eksperymentach (odwołania do konkretnych
-wyników). Jest to jedna z najważniejszych sekcji tego sprawozdania, gdyż
-prezentuje poziom zrozumienia badanego problemu.}
+Dla tagu `topic' wyniki okazały się być zróżnicowane i niezależne od jakiekolwiek zaimplementowanej przez nas metryki. Tutaj największy wpływ okazała się mieć stosunek zbioru treningowego do testowego. Zbyt mały zbiór treningowy (20\%) powoduje spadek skuteczności dopasowania dla wszystkich metryk.
+Dla liczby sąsiadów większej niż 2 wyniki oscylowały wokół podobnych wartości.\newline
+
+Dla tagu `medium', który został zaczerpnięty z przygotowanego przez nas zbioru artykułów, średnie najlepsze wyniki (powyżej 60\% skuteczności) otrzymywaliśmy z zbiorem treningowym na poziomie 60\%. Podczas eksperymentu najlepiej poradziła sobie metryka Uliczna, jednakże pozostałe metryki wykazywały się różną skutecznością, zależną od doboru liczby sąsiadów. Widoczna byłą rosnąca skuteczność, dla co raz to większego K. 
+
 \section{Wnioski}
 \begin{itemize}
-\item Wniosek1
-\item Wniosek2
-\item Wniosek3
+\item Metoda K najbliższych sąsiadów wskazuje dużą (ponad 80\%) skuteczność przy klasyfikacji tekstów.
+\item Dla dużego zbioru danych (7000 artykułów), liczba sąsiadów oscylująca wokół 5 zawsze dawała lepsze rezultaty.
+\item Największą skuteczność otrzymaliśmy dla zbioru treningowego na poziomie 60\%. Zbiory 20\% i 80\% okazały się niezadawalające. 
+\item Metryka jako parametr naszego algorytmu miała znaczący mały wpływ na skuteczność. Wpływ ten był jednak zauważalny i metryka Euklidesowa najczęściej okazywała się zwycięzcą. 
 \end{itemize}
 
 \begin{thebibliography}{}
