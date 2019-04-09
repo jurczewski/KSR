@@ -35,7 +35,7 @@ namespace Zad1
         public string[][] createPrintableConfusionMatrix()
         { 
             List<string> _labels = new List<string>();
-            foreach(var s in _labels)
+            foreach(var s in labels)
             {
                 if (s.Length > 10)
                 {
