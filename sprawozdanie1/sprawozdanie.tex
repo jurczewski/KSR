@@ -29,15 +29,16 @@
 
 
 \section{Cel}
-Celem zadania było stworzenie aplikacji do klasyfikacji tekstów metodą k-NN, korzystając z różnych sposób ekstrakcji wektorów cech oraz istniejących miar podobieństwa porównać kategorie do tych przypisanych przez aplikację i zbadać jakie parametry najbardziej wpływają na rozpoznwanie tekstu.
+Celem zadania było stworzenie aplikacji do klasyfikacji tekstów metodą k-NN, korzystając z różnych sposobów ekstrakcji wektorów cech i metryk.
+Dodatkowo przeanalizowanie dla jakich parametórw program ma największą skutecznosć.
 
 \section{Wprowadzenie}
-Zagadnieniem, jakim zajmowaliśmy się w ramach projektu jest klasyfikacja statystyczna, która jest rodzajem algorytmu statystycznego przydzielającego elementy do klas, bazując na cechach tych elementów. W ramach przeprowadzanego eksperymentu zaimplementowaliśmy klasyfikator k-najbliższych sąsiadów. \newline
+Zagadnieniem, w okół którego skupiona jest nasza aplikacja jest klasyfikacja statystyczna, która jest rodzajem algorytmu statystycznego przydzielającego elementy do klas, bazując na cechach owych elementów. W ramach przeprowadzanego eksperymentu zaimplementowaliśmy klasyfikator k-najbliższych sąsiadów. \newline
 
 Algorytm k najbliższych sąsiadów, nazywany także algorytmem k-NN, należy do grupy algorytmów leniwych, czyli takich, które nie tworzą wewnętrznej reprezentacji danych uczących, lecz szukają rozwiązania dopiero w momencie pojawienia się wzorca testującego. Przechowuje wszystkie wzorce uczące, względem których wyznacza odległość wzorca testowego [2]. Metoda k-NN wyznacza k sąsiadów, do których badany element ma najmniejszą odległość w danej metryce, a następnie wyznacza wynik w oparciu o najczęstszy element, wśród k najbliższych. W przypadku naszego projektu odległość definiujemy jako skalę podobieństwa tekstów. \newline
 
 W ramach zadania zostały użyte 2 metody ekstrakcji cech: \newline
-\begin{itemize}
+\begin{itemize}[label=$\circ$]
 
 \item Inverse document frequency - metoda polegająca na wyznaczeniu, czy dane słowo występuje powszechnie we wszystkich dokumentach. Jest to logarytmicznie skalowana odwrotna część dokumentów zawierających wybrane słowo (uzyskana poprzez podzielenie całkowitej liczby dokumentów przez liczbę dokumentów zawierających ten termin). Obliczana jest z poniższego wzoru:
 $$
@@ -48,13 +49,13 @@ $$
 \item Term frequency - metoda polegająca na zliczeniu częstości występowania danego słowa w dokumencie. Obliczana jest z poniższego wzoru:
 $$
 tf_{i,j}
-= \frac{n_{i,j}}{\sum_{k}n{k,j}}
+= \frac{n_{i,j}}{\sum_{k}n{k,j}}\\[2\baselineskip]
 $$
 \end{itemize}
 
 Do obliczenia odległości tekstów posłużyliśmy się 3 metrykami: \newline
 
-\begin{itemize}
+\begin{itemize}[label=$\bullet$]
 \item metryka Euklidesowa - w celu obliczenia odległości $ d_{e}(x,y) $ między dwoma punktami $ x, y $ należy obliczyć pierwiastek kwadratowy z sumy drugich potęg różnic wartości współrzędnych o tych samych indeksach, zgodnie ze wzorem:
 $$
 d_{e}(x,y)= \sqrt{ (y_{1} - x_{1})^2 + \cdots + (y_{n} - x_{n})^2 }
@@ -77,10 +78,10 @@ Program został w całosci stworzony w języku C\# (.NET Framework, v4.6.1).
 
 W programie znajdują się następujące klasy:
 \begin{itemize}[label=$\bullet$]
-\item DocumentReader - klasa odpowiedzialna
 \item Knn - implementacja algorytmu K-nn
 \item Program - klasa główna
 \item ArticleUtilis - klasa pomocnicza
+\item Results - klasa odpowiedzialna za dokładne zestawienie rezultatów
 
 \begin{figure}[H]
 	\centering
@@ -113,7 +114,7 @@ W programie znajdują się następujące klasy:
 
 \item Article - klasa reprezentująca pojedyńczy artykuł
 \item ProcessedArticle - klasa dziecicząca po Article, reprezentuje przetworzony artykuł
-\end{itemize}
+
 
 \begin{figure}[H]
 	\centering
@@ -121,33 +122,409 @@ W programie znajdują się następujące klasy:
 	\caption{Diagram UML wygenerowany dla klas reprezentujących artykuły.}
 \end{figure}
 
+\item IReader - interfejs dla klas wczytujących dane, klasy implementujące owy interfejs:
+\begin{itemize}
+\item DocumentReader -  klasa odpowiedzialna za wczytanie plików z zestwu \cite{data}
+\item CustomReader -  klasa odpowiedzialna za wczytanie plików z przygotowanego przez nas zestawu \cite{our}
+\end{itemize}
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/uml5.png}
+	\caption{Diagram UML wygenerowany dla klas wczytaujących dane.}
+\end{figure}
+
 \section{Materiały i metody}
 Klasyfikacja tekstów została wykonana wszystkimi dostępnymi metodami ekstrakcji cech dla wszystkich trzech metryk. Dla każdego przypadku testowego dokonano klasyfikacji tekstu dla k $\in$ \{2, 3, 5, 7, 10, 15, 20\} najbliższych sąsiadów. Wyniki porównano z faktyczną etykietą danego artykułu. \newline
 
+Przyjelismy trzy różne proporcje zbioru treningowego do zbioru testowego, było to:
+\begin{itemize}
+\item zbiór treningowy 20\%, zbiór testowy 80\%
+\item zbiór treningowy 60\%, zbiór testowy 40\%
+\item zbiór treningowy 80\%, zbiór testowy 20\%
+\end{itemize}
+
 Klasyfikacja dotycząca lokalizacji przeprowadzana była jedynie na danych, których pole places przyjmowało jedną z wartości: west-germany, usa, france, uk, canada, japan.
-%Zbiór treningowy stanowił 60\% artykułów, zaś zbiór testowy 40\% artykułów.
 \newline
 
-Klasyfikacja dotycząca tematów przeprowadzana była jedynie na danych, które pole topics przyjmowało jedną z wartości: gold, cocoa, sugar, coffe, grain.
-%Zbiory testowe stanowiły 60\% artykułów. \newline
+Klasyfikacja dotycząca tematów przeprowadzana była jedynie na danych, które pole topics przyjmowało jedną z wartości: gold, cocoa, sugar, coffe, grain.\newline
 
-%Danymi jakie sami przygotowaliśmy do analizy były teksty piosenek znanych artystów. Posiadały one jedną kategorię - author. Przyjmowało ono jedną z wartości: taylor swift, macklemore, twenty one pilots, eminem, ed sheeran, black eyed peas. Zbiór treningowy stanowił 60\% tekstów, zaś zbiór testowy 40\% tekstów.
-
-Trzecim zestawem danych do analizy były nagłówki artykułów naukowych i cytaty o miłosci. Podzielone zostały przez tematykę - topic. Przyjmowało ono jedną z wartości: biology lub love.
-
+Danymi jakimi przygotowalimy do analizy były opisy dzieł kultury. Posiadały one jedną kategorię - medium. Pole przyjmowało wartosć: book lub movie.
 \section{Wyniki}
+\subsection{Term frequency}
+%%%%%%
+%Euklidesowa
+%%%%%%
+\subsubsection{Metryka Euklidesowa}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+			2 & 72,47 & 22,22 & 61,25 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 20\%, zbiór testowy 80\%}
+\end{table}
 
-{\color{blue}
-W tej sekcji należy zaprezentować, dla każdego przeprowadzonego eksperymentu,
-kompletny zestaw wyników w postaci tabel, wykresów itp. Powinny być one tak
-ponazywane, aby było wiadomo, do czego się odnoszą. Wszystkie tabele i wykresy
-należy oczywiście opisać (opisać co jest na osiach, w kolumnach itd.) stosując
-się do przyjętych wcześniej oznaczeń. Nie należy tu komentować i interpretować
-wyników, gdyż miejsce na to jest w kolejnej sekcji. Tu również dobrze jest
-wprowadzić oznaczenia (tabel, wykresów) aby móc się do nich odwoływać
-poniżej.}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+			2 & 72,47 & 22,22 & 61,25 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 60\%, zbiór testowy 40\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+			2 & 72,47 & 22,22 & 61,25 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 80\%, zbiór testowy 20\%}
+\end{table}
+
+%%%%%%
+%ulicznej
+%%%%%%
+\subsubsection{Metryka uliczna}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+			2 & 72,47 & 22,22 & 61,25 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 20\%, zbiór testowy 80\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+			2 & 72,47 & 22,22 & 61,25 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 60\%, zbiór testowy 40\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+			2 & 72,47 & 22,22 & 61,25 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 80\%, zbiór testowy 20\%}
+\end{table}
+
+%%%%%%
+%Czebyszewa
+%%%%%%
+\subsubsection{Metryka Czebyszewa}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+			2 & 72,47 & 22,22 & 61,25 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 20\%, zbiór testowy 80\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+			2 & 72,47 & 22,22 & 61,25 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 60\%, zbiór testowy 40\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+			2 & 72,47 & 22,22 & 61,25 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 80\%, zbiór testowy 20\%}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Inverse document frequency}
+
+%%%%%%
+%Euklidesowa
+%%%%%%
+\subsubsection{Metryka Euklidesowa}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+2 & 78,7 & 32,6 & 57,5 \\ 
+3 & 82,6 & 31,5 & 43,8 \\ 
+5 & 82,9 & 29,3 & 65 \\ 
+7 & 82,3 & 33,7 & 66,2 \\ 
+10 & 81,7 & 33,7 & 51,2 \\ 
+15 & 81,3 & 35,9 & 46,2 \\ 
+20 & 81 & 35,9 & 46,2 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 20\%, zbiór testowy 80\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+2 & 78,6 & 34,8 & 57,5 \\ 
+3 & 82,3 & 32,6 & 62,5 \\ 
+5 & 83,5 & 28,3 & 45 \\ 
+7 & 83,7 & 28,3 & 67,5 \\ 
+10 & 83,4 & 28,3 & 30 \\ 
+15 & 82,8 & 21,7 & 42,5 \\ 
+20 & 82,6 & 26,1 & 45 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 60\%, zbiór testowy 40\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+2 & 80,5 & 30,4 & 35 \\ 
+3 & 83,8 & 34,8 & 65 \\ 
+5 & 83,8 & 21,7 & 55 \\ 
+7 & 83,8 & 26,1 & 45 \\ 
+10 & 83,5 & 26,1 & 50 \\ 
+15 & 83,7 & 43,5 & 50 \\ 
+20 & 83,1 & 34,8 & 70 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 80\%, zbiór testowy 20\%}
+\end{table}
+
+%%%%%%
+%ulicznej
+%%%%%%
+\subsubsection{Metryka uliczna}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+2 & 77,8 & 31,5 & 50 \\ 
+3 & 81,2 & 34,8 & 63,7 \\ 
+5 & 81,7 & 33,7 & 52,5 \\ 
+7 & 81,3 & 34,8 & 45 \\ 
+10 & 81,2 & 35,9 & 57,5 \\ 
+15 & 81 & 35,9 & 47,5 \\ 
+20 & 81 & 35,9 & 47,5 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 20\%, zbiór testowy 80\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+2 & 78,8 & 19,6 & 60 \\ 
+3 & 81,8 & 19,6 & 52,5 \\ 
+5 & 82,6 & 19,6 & 65 \\ 
+7 & 82,8 & 17,4 & 67,5 \\ 
+10 & 82,2 & 19,6 & 50 \\ 
+15 & 81,9 & 19,6 & 70 \\ 
+20 & 81,5 & 26,1 & 75 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 60\%, zbiór testowy 40\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+2 & 79,2 & 26,1 & 50 \\ 
+3 & 83,3 & 30,4 & 50 \\ 
+5 & 83,4 & 26,1 & 45 \\ 
+7 & 83,3 & 21,7 & 60 \\ 
+10 & 82,9 & 26,1 & 65 \\ 
+15 & 82,8 & 39,1 & 45 \\ 
+20 & 82,2 & 26,1 & 70 \\ 
+
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 80\%, zbiór testowy 20\%}
+\end{table}
+
+%%%%%%
+%Czebyszewa
+%%%%%%
+\subsubsection{Metryka Czebyszewa}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+2 & 77,6 & 31,5 & 62,5 \\ 
+3 & 80,7 & 31,5 & 51,2 \\ 
+5 & 81,5 & 40,2 & 58,8 \\ 
+7 & 81,2 & 33,7 & 70 \\ 
+10 & 81 & 34,8 & 47,5 \\ 
+15 & 80,5 & 35,9 & 57,5 \\ 
+20 & 79,6 & 35,9 & 50 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 20\%, zbiór testowy 80\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+2 & 79,8 & 41,3 & 47,5 \\ 
+3 & 81,8 & 63 & 42,5 \\ 
+5 & 81,6 & 28,3 & 62,5 \\ 
+7 & 81,7 & 39,1 & 70 \\ 
+10 & 81,6 & 34,8 & 65 \\ 
+15 & 81,6 & 23,9 & 45 \\ 
+20 & 81,5 & 23,9 & 52,5 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 60\%, zbiór testowy 40\%}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{k} & \textbf{places [\%]} & \textbf{topics [\%]} &  \textbf{medium [\%]} \\ [0.5ex] 
+		\hline
+		\hline 
+2 & 79,1 & 43,5 & 80 \\ 
+3 & 82,4 & 39,1 & 60 \\ 
+5 & 81,6 & 26,1 & 40 \\ 
+7 & 81,7 & 30,4 & 50 \\ 
+10 & 81,9 & 26,1 & 55 \\ 
+15 & 82,2 & 26,1 & 60 \\ 
+20 & 82,1 & 26,1 & 65 \\ 
+		\hline
+	\end{tabular}
+	\caption{Skuteczność klasyfikacji dla podziału: zbiór treningowy 80\%, zbiór testowy 20\%}
+\end{table}
+
+\subsection{Inverse document frequency - podsumowanie wykresami}
+%%%PLACES
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/results/IDF_20_places.png}
+	\caption{Dane z tabel 1-9 dla kategorii places, zbiór treningowy 20\%, zbiór testowy 80\%}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/results/IDF_60_places.png}
+	\caption{Dane z tabel 1-9 dla kategorii places, zbiór treningowy 60\%, zbiór testowy 40\%}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/results/IDF_80_places.png}
+	\caption{Dane z tabel 1-9 dla kategorii places, zbiór treningowy 80\%, zbiór testowy 20\%}
+\end{figure}
+%%%Topics
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/results/IDF_20_topics.png}
+	\caption{Dane z tabel 1-9 dla kategorii topics, zbiór treningowy 20\%, zbiór testowy 80\%}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/results/IDF_60_topics.png}
+	\caption{Dane z tabel 1-9 dla kategorii topics, zbiór treningowy 60\%, zbiór testowy 40\%}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/results/IDF_80_topics.png}
+	\caption{Dane z tabel 1-9 dla kategorii topics, zbiór treningowy 80\%, zbiór testowy 20\%}
+\end{figure}
+%%%MEDIUM
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/results/IDF_20_medium.png}
+	\caption{Dane z tabel 1-9 dla kategorii medium, zbiór treningowy 20\%, zbiór testowy 80\%}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/results/IDF_60_medium.png}
+	\caption{Dane z tabel 1-9 dla kategorii medium, zbiór treningowy 60\%, zbiór testowy 40\%}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/results/IDF_80_medium.png}
+	\caption{Dane z tabel 1-9 dla kategorii medium, zbiór treningowy 80\%, zbiór testowy 20\%}
+\end{figure}
 
 \section{Dyskusja}
+
+
+
 {\color{blue}
 Sekcja ta powinna zawierać dokładną interpretację uzyskanych wyników
 eksperymentów wraz ze szczegółowymi wnioskami z nich płynącymi. Najcenniejsze
@@ -167,5 +544,13 @@ charakterze uniwersalnym.}
 \begin{thebibliography}{}
 \bibitem{adam}
 Methods for the linguistic summarization of data - aplications of fuzzy sets and their extensions, Adam Niewiadomski, Akademicka Oficyna Wydawnicza EXIT, Warszawa 2008
+\bibitem{stop}
+https://github.com/hklemp/dotnet-stop-words
+\bibitem{stemmer}
+http://snowball.tartarus.org/algorithms/english/stemmer.html
+\bibitem{data}
+https://archive.ics.uci.edu/ml/datasets/Reuters-21578+Text+Categorization+Collection
+\bibitem{our}
+https://github.com/jurczewski/KSR/blob/master/Zad1/Zad1/Data/ours.sgm
 \end{thebibliography}
 \end{document}
