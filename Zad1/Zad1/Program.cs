@@ -140,13 +140,15 @@ namespace Zad1
             RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
-            Console.WriteLine(metric.GetType().Name);
+
             metric = new ChebyshevMetric();
+            Console.WriteLine(metric.GetType().Name);
             RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
-            Console.WriteLine(metric.GetType().Name);
+
             metric = new ManhattanMetric();
+            Console.WriteLine(metric.GetType().Name);
             RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
@@ -158,13 +160,15 @@ namespace Zad1
             RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
-            Console.WriteLine(metric.GetType().Name);
+
             metric = new ChebyshevMetric();
+            Console.WriteLine(metric.GetType().Name);
             RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
-            Console.WriteLine(metric.GetType().Name);
+
             metric = new ManhattanMetric();
+            Console.WriteLine(metric.GetType().Name);
             RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
