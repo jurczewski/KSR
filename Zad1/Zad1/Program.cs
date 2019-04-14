@@ -9,11 +9,61 @@ namespace Zad1
 {
     public class Program
     {
-        private static double Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm, IReader reader)
+        private static List<Article> allArticlesDocument;
+        private static List<Article> allArticlesCustom;
+
+        private static readonly string CategoryNamePlaces = "places";
+        private static readonly string CategoryNameTopics = "topics";
+        private static readonly string CategoryNameMedium = "name";
+
+        private static readonly List<string> validPlaces = new List<string>
         {
-            List<Article> allArticles = reader.ObtainVectorSpaceModels().ToList();
-            if (reader.GetType().Name == "CustomReader") allArticles = allArticles.OrderBy(a => Guid.NewGuid()).ToList();
-            List<Article> validArticles = ArticleUtils.GetArticlesWithValidTags(allArticles, CategoryName, validTerms);
+            "usa",
+            "france",
+            "uk",
+            "canada",
+            "japan",
+            "west-germany"
+        };
+
+        private static readonly List<string> validTopics = new List<string>
+        {
+            "gold",
+            "cocoa",
+            "sugar",
+            "coffe",
+            "grain"
+        };
+
+        private static readonly List<string> validNames = new List<string>
+        {
+            "movie",
+            "book"
+        };
+
+        public static void LoadAllDocumentArticles(DocumentReader reader)
+        {
+            allArticlesDocument = reader.ObtainVectorSpaceModels().ToList();
+        }
+
+        public static void LoadAllCustomArticles(CustomReader reader)
+        {
+            allArticlesCustom = reader.ObtainVectorSpaceModels().ToList();
+            allArticlesCustom = allArticlesCustom.OrderBy(a => Guid.NewGuid()).ToList();
+        }
+
+        private static double Run(List<string> validTerms, string CategoryName, double trainingToTestDataRatio, int stopListWordNumber, IMetric metric, int k, bool whichAlgorithm)
+        {
+            List<Article> validArticles;
+            if (CategoryName == CategoryNamePlaces || CategoryName == CategoryNameTopics)
+            {
+                validArticles = ArticleUtils.GetArticlesWithValidTags(allArticlesDocument, CategoryName, validTerms);
+            }
+            else
+            {
+                validArticles = ArticleUtils.GetArticlesWithValidTags(allArticlesCustom, CategoryName, validTerms);
+            }
+            
             int trainingArticleNumber = Convert.ToInt32(trainingToTestDataRatio * validArticles.Count);
             List<Article> trainingArticles = validArticles.Take(trainingArticleNumber).ToList();
             List<Article> testArticles = validArticles.Skip(trainingArticleNumber).ToList();
@@ -91,49 +141,24 @@ namespace Zad1
                 }
             }
 
-            //Console.WriteLine($"For k = {k}, category: {CategoryName}, metric: {metric.GetType().Name} ,  correct are: {((float)correctNumber / (float)processedTestArticles.Count()) * 100}");
+            #region detailedResults
             //Results result = new Results();
             //result.createConfusionMatrix(validTerms, processedTestArticles);
             //result.printConfusionMatrix();
             //Console.WriteLine();
+            #endregion
 
             return ((float)correctNumber / processedTestArticles.Count()) * 100;
         }
 
-        private static readonly string CategoryNamePlaces = "places";
-        private static readonly string CategoryNameTopics = "topics";
-        private static readonly string CategoryNameMedium = "name";
-
-        private static readonly List<string> validPlaces = new List<string>
-            {
-                "usa",
-                "france",
-                "uk",
-                "canada",
-                "japan",
-                "west-germany"
-            };
-
-        private static readonly List<string> validTopics = new List<string>
-            {
-                "gold",
-                "cocoa",
-                "sugar",
-                "coffe",
-                "grain"
-            };
-
-        private static readonly List<string> validNames = new List<string>
-            {
-                "movie",
-                "book"
-            };
-
         static void Main(string[] args)
         {
-            double trainingToTestDataRatio = 0.6;
+            //double trainingToTestDataRatio = 0.6;
             int stopListWordNumber = 100;
             bool IdfOn = true;
+
+            LoadAllDocumentArticles(new DocumentReader());
+            LoadAllCustomArticles(new CustomReader());
 
             IMetric metric = new EuclideanMetric();
             Console.WriteLine(metric.GetType().Name);
@@ -153,8 +178,8 @@ namespace Zad1
             RunFor3Sets(0.6, stopListWordNumber, metric, IdfOn);
             RunFor3Sets(0.8, stopListWordNumber, metric, IdfOn);
 
-            IdfOn = false;
 
+            IdfOn = false;
             metric = new EuclideanMetric();
             Console.WriteLine(metric.GetType().Name);
             RunFor3Sets(0.2, stopListWordNumber, metric, IdfOn);
@@ -187,9 +212,9 @@ namespace Zad1
             for (var i = 0; i < ks.Count(); i++)
             {
                 Console.WriteLine(ks[i]);
-                double p = Math.Round(Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new DocumentReader()), 1);
-                double t = Math.Round(Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn, new DocumentReader()),1);
-                double m = Math.Round(Run(validNames, CategoryNameMedium, trainingToTestDataRatio, 20, metric, ks[i], IdfOn, new CustomReader()),1);
+                double p = Math.Round(Run(validPlaces, CategoryNamePlaces, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn), 1);
+                double t = Math.Round(Run(validTopics, CategoryNameTopics, trainingToTestDataRatio, stopListWordNumber, metric, ks[i], IdfOn), 1);
+                double m = Math.Round(Run(validNames, CategoryNameMedium, trainingToTestDataRatio, 20, metric, ks[i], IdfOn), 1);
                 File.AppendAllText($@"C:\Users\Bartosz\Desktop\{algo}_{metric.GetType().Name}.txt", $"{ks[i]} & {p} & {t} & {m} \\\\ \n");
             }
         }
