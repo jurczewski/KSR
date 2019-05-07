@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zad2", "Zad2\Zad2.csproj", "{3C6AF929-88C6-4315-9828-9ECF9EDA911E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Zad2\Logic.csproj", "{3C6AF929-88C6-4315-9828-9ECF9EDA911E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
