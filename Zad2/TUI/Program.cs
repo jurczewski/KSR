@@ -14,7 +14,11 @@ namespace TUI
             List<Player> players = new List<Player>();
             DataLoader.LoadData(ref players);
             Console.WriteLine(players.Count);
+            Console.WriteLine(players[0].Id);
             Console.WriteLine(players[0].Age);
+            Console.WriteLine(players[0].Value);
+
+            Console.ReadKey();
         }
     }
 }
