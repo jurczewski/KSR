@@ -13,5 +13,10 @@
         public int Sprint_speed { set; get; }
         public int Stamina { set; get; }
         public int Strength { set; get; }
+
+        public override string ToString()
+        {
+            return Id + ": " + Age + " " + Overall + " " + Value + " " + Wage + " " + Height + " " + Weight + " " + Fk_accuracy + " " + Sprint_speed + " " + Stamina + " " + Strength;
+        }
     }
 }

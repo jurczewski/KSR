@@ -1,4 +1,7 @@
-﻿/* CREATE TABLE */
+﻿CREATE DATABASE IF NOT EXISTS ksr;
+use ksr;
+
+/* CREATE TABLE */
 CREATE TABLE [data](
 ID INT,
 Age DECIMAL(10,2),
