@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Zad2\Logic.csproj"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TUI", "TUI\TUI.csproj", "{ACB47732-A054-4645-B536-CC6E074D69D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{1558D03F-4BA2-473A-8353-87B905B98AA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{ACB47732-A054-4645-B536-CC6E074D69D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACB47732-A054-4645-B536-CC6E074D69D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACB47732-A054-4645-B536-CC6E074D69D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1558D03F-4BA2-473A-8353-87B905B98AA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1558D03F-4BA2-473A-8353-87B905B98AA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1558D03F-4BA2-473A-8353-87B905B98AA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1558D03F-4BA2-473A-8353-87B905B98AA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
