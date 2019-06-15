@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Windows.Input;
 using View.FuzzyLogic;
 using Zad2;
@@ -136,11 +135,13 @@ namespace ViewModel
 
         private void Save()
         {
-            string path = "output.txt";
+            string fullPath = Environment.CurrentDirectory;
+            string path = Path.GetFullPath(Path.Combine(fullPath, @"..\..\..\"));
+            string fileName = "export.txt";
 
             if (!File.Exists(path))
             {
-                File.WriteAllText(path, Output);
+                File.WriteAllText(string.Concat(path, fileName), Output);
             }
         }
 

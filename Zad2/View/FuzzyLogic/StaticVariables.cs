@@ -78,17 +78,6 @@ namespace View.FuzzyLogic
             }
         };
         #endregion
-        //public static LinguisticVariable none = new LinguisticVariable
-        //{
-        //    Name = "-",
-        //    MemberToExtract = "-",
-        //    Extractor = (e) => new ConstantFunction().GetMembership(0.0),
-        //    FuzzySet = new FuzzySet
-        //    {
-        //        MembershipFunction = new ConstantFunction(),
-        //        FieldExtractor = (e) => 0.0
-        //    }
-        //};
 
         public static ObservableCollection<LinguisticVariable> getAllVariables()
         {

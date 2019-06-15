@@ -7,9 +7,9 @@ namespace Zad2
     {
         public static void LoadData(ref List<Player> players)
         {
-            string connectionString = @"Server=.;Integrated Security=true;Initial Catalog=ksr;";
+            var connectionString = @"Server=.;Integrated Security=true;Initial Catalog=ksr;";
 
-            var query = "select Id,Age,Overall,Value,Wage,Height,Weight,FKAccuracy,SprintSpeed,Stamina,Strength from [data]";
+            var query = "SELECT Id, Age, Overall, Value, Wage, Height, Weight, FKAccuracy, SprintSpeed, Stamina, Strength FROM [data]";
 
             using(SqlConnection connection = new SqlConnection(connectionString))
             {
