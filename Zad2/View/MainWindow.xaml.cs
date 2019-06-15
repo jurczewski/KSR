@@ -12,17 +12,29 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ViewModel;
 
-namespace View
+namespace Zad2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly MainViewModel viewModel;
+        private List<Player> players = new List<Player>();
         public MainWindow()
         {
             InitializeComponent();
+            DataLoader.LoadData(ref players);
+            viewModel = new MainViewModel(players);
+            DataContext = viewModel;
+            Loaded += OnLoaded;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

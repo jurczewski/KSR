@@ -55,6 +55,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataModel\DataLoader.cs" />
+    <Compile Include="FuzzyLogic\And.cs" />
+    <Compile Include="FuzzyLogic\FuzzySet.cs" />
+    <Compile Include="FuzzyLogic\LinguisticVariable.cs" />
+    <Compile Include="FuzzyLogic\Measures.cs" />
+    <Compile Include="FuzzyLogic\Or.cs" />
+    <Compile Include="FuzzyLogic\StaticQuantifiers.cs" />
+    <Compile Include="FuzzyLogic\StaticVariables.cs" />
+    <Compile Include="Membership\DiscreteFunction.cs" />
+    <Compile Include="Membership\IMembershipFunction.cs" />
+    <Compile Include="Membership\TrapezoidFunction.cs" />
+    <Compile Include="Membership\TriangularFunction.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\RelayCommand.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -63,6 +77,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataModel\Player.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
