@@ -10,6 +10,7 @@ using System;
 using Zad2;
 using Zad2.FuzzyLogic;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace ViewModel
 {
@@ -145,11 +146,25 @@ namespace ViewModel
         private void Save()
         {
             Task.Run(() => {
-                string summary = Output;
-                SaveFileDialog dialog = new SaveFileDialog();
+                string messageToSave = SelectedQualifier.MemberAndName + " -> " + SelectedSummarizer1.MemberAndName;
+                if (Andor.Count != 0 && SelectedSummarizer2 != null) messageToSave += " " + Andor[0].Name + " " + SelectedSummarizer2.MemberAndName;
+
+                messageToSave += ";T_ALL;T1;T2;T3;T4;T5;T6;T7;T8;T9;T10;T11;\n";
+
+                Summaries.ForEach((s) => {
+                    messageToSave += s.Value.summary + ";" + s.Key + ";";
+                    s.Value.tValues.ForEach((w) => messageToSave += w + ";");
+                    messageToSave += "\n";
+                });
+
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    Filter = "CSV file(.csv) | *.csv"
+                };
+
                 dialog.ShowDialog();
                 string path = dialog.FileName;
-                File.WriteAllText(path, summary);
+                File.WriteAllText(path, messageToSave, Encoding.UTF8);
             });
         
         }
