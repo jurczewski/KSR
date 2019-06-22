@@ -143,16 +143,25 @@ namespace ViewModel
             System.Diagnostics.Trace.WriteLine(log.Substring(0, log.Length - 2));
         }
 
+        private string ExtractQuantifier(string summary)
+        {
+            foreach(LinguisticVariable quantifier in quantifiers)
+            {
+                if (summary.Contains(quantifier.Name)) return quantifier.Name;
+            }
+            return "";
+        }
+
         private void Save()
         {
             Task.Run(() => {
                 string messageToSave = SelectedQualifier.MemberAndName + " -> " + SelectedSummarizer1.MemberAndName;
-                if (Andor.Count != 0 && SelectedSummarizer2 != null) messageToSave += " " + Andor[0].Name + " " + SelectedSummarizer2.MemberAndName;
+            if (SelectedFunction != null && SelectedSummarizer2 != null) messageToSave += " " + SelectedFunction.Name + " " + SelectedSummarizer2.MemberAndName;
 
-                messageToSave += ";T_ALL;T1;T2;T3;T4;T5;T6;T7;T8;T9;T10;T11;\n";
+                messageToSave += ";Q;T_ALL;T1;T2;T3;T4;T5;T6;T7;T8;T9;T10;T11;\n";
 
                 Summaries.ForEach((s) => {
-                    messageToSave += s.Value.summary + ";" + s.Key + ";";
+                    messageToSave += s.Value.summary + ";" + ExtractQuantifier(s.Value.summary) + ";" + s.Key + ";";
                     s.Value.tValues.ForEach((w) => messageToSave += w + ";");
                     messageToSave += "\n";
                 });
