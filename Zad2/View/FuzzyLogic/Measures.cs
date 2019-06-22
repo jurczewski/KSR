@@ -48,15 +48,14 @@ namespace View.FuzzyLogic
             {
                 weightedValues = new List<double>
                 {
-                    //todo: update
-                    (6.0 / 8) *   measureValues[0],
-                    (3.0 / 88) *  measureValues[1],
-                    (3.0 / 88) *  measureValues[2],
-                    (3.0 / 88) *  measureValues[3],
-                    (3.0 / 88) *  measureValues[4],
-                    (3.0 / 88) *  measureValues[5],
-                    (3.0 / 88) *  measureValues[6],
-                    (3.0 / 88) *  measureValues[7],
+                    0.7  *  measureValues[0],
+                    0.03 *  measureValues[1],
+                    0.03 *  measureValues[2],
+                    0.03 *  measureValues[3],
+                    0.03 *  measureValues[4],
+                    0.03 *  measureValues[5],
+                    0.03 *  measureValues[6],
+                    0.03 *  measureValues[7],
                 };
             }
 

@@ -199,7 +199,7 @@ namespace View.FuzzyLogic
         {
             Name = "Tall",
             MemberToExtract = "Height",
-            Extractor = e => new TrapezoidFunction(new List<double> { 184, 190, 195, 207 }).GetMembership(e.Height),
+            Extractor = e => new TrapezoidFunction(new List<double> { 184, 190, 200, 207 }).GetMembership(e.Height),
             FuzzySet = new FuzzySet
             {
                 MembershipFunction = new TrapezoidFunction(new List<double> { 184, 190, 200, 207 }),
@@ -227,7 +227,7 @@ namespace View.FuzzyLogic
             Extractor = e => new TrapezoidFunction(new List<double> { 150, 160, 190, 200 }).GetMembership(e.Weight),
             FuzzySet = new FuzzySet
             {
-                MembershipFunction = new TrapezoidFunction(new List<double> { 151, 160, 190, 200 }),
+                MembershipFunction = new TrapezoidFunction(new List<double> { 150, 160, 190, 200 }),
                 FieldExtractor = (e) => e.Weight
             }
         };
@@ -415,7 +415,7 @@ namespace View.FuzzyLogic
                 staminaLow, staminaMedium, staminaHigh,
                 strengthLow, strengthMedium, strengthHigh,
                 every
-            };
+            };            
         }
     }
 }
