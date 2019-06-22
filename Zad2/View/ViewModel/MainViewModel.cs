@@ -86,7 +86,7 @@ namespace ViewModel
 
         private string GetQualifierString(string name)
         {
-            return name.Equals("--: --") ? "" : " of people being/having " + name;
+            return name.Equals("Every: Every") ? "" : " of people being/having " + name;
         }
 
         private KeyValuePair<double, (string, List<double>)> CreateSummaryPair(LinguisticVariable quantifier, LinguisticVariable summarizer, string summary)

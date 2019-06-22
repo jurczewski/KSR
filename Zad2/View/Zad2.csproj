@@ -67,6 +67,7 @@
     <Compile Include="FuzzyLogic\Or.cs" />
     <Compile Include="FuzzyLogic\StaticQuantifiers.cs" />
     <Compile Include="FuzzyLogic\StaticVariables.cs" />
+    <Compile Include="Membership\ConstantFunction.cs" />
     <Compile Include="Membership\DiscreteFunction.cs" />
     <Compile Include="Membership\IMembershipFunction.cs" />
     <Compile Include="Membership\TrapezoidFunction.cs" />

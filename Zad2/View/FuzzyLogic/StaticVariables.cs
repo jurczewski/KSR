@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using View.Membership;
 using Zad2.FuzzyLogic;
 using Zad2.Membership;
 
@@ -15,7 +16,7 @@ namespace View.FuzzyLogic
             Extractor = e => new TrapezoidFunction(new List<double> { 15, 16, 17, 20 }).GetMembership(e.Age),
             FuzzySet = new FuzzySet
             {
-                MembershipFunction = new TrapezoidFunction(new List<double> { 13, 13, 17, 20 }),
+                MembershipFunction = new TrapezoidFunction(new List<double> { 15, 16, 17, 20 }),
                 FieldExtractor = (e) => e.Age
             }
         };
@@ -387,6 +388,17 @@ namespace View.FuzzyLogic
         };
         #endregion
 
+        public static LinguisticVariable every = new LinguisticVariable
+        {
+            Name = "Every",
+            MemberToExtract = "Every",
+            Extractor = (e) => new ConstantFunction().GetMembership(0.0),
+            FuzzySet = new FuzzySet
+            {
+                MembershipFunction = new ConstantFunction(),
+                FieldExtractor = (e) => 0.0
+            }
+        };
 
         public static ObservableCollection<LinguisticVariable> getAllVariables()
         {
@@ -401,7 +413,8 @@ namespace View.FuzzyLogic
                 fkaccuracyLow, fkaccuracyMedium, fkaccuracyHigh, 
                 sprintLow, sprintMedium, sprintHigh,
                 staminaLow, staminaMedium, staminaHigh,
-                strengthLow, strengthMedium, strengthHigh
+                strengthLow, strengthMedium, strengthHigh,
+                every
             };
         }
     }
