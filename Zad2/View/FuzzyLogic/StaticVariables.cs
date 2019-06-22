@@ -314,6 +314,7 @@ namespace View.FuzzyLogic
             }
         };
         #endregion
+
         #region Stamina
         public static LinguisticVariable staminaLow = new LinguisticVariable
         {
@@ -385,6 +386,7 @@ namespace View.FuzzyLogic
             }
         };
         #endregion
+
 
         public static ObservableCollection<LinguisticVariable> getAllVariables()
         {

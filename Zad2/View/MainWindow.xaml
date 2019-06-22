@@ -5,27 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Zad2"
         mc:Ignorable="d"
-        Title="Lingiwstyczne Podsumowanie Bazy Danych - KSR Zad 2" Height="450" Width="800">
+        Title="Lingiwstyczne Podsumowanie Bazy Danych - KSR Zad 2" Height="450" Width="800"
+        FontFamily="Segoe UI" FontSize="12"
+        >
     <Grid>
         <ComboBox HorizontalAlignment="Left" Margin="94,10,0,0" VerticalAlignment="Top" Width="120" 
                   ItemsSource="{Binding Path=LinguisticVariables}" SelectedItem="{Binding Path=SelectedQualifier}" DisplayMemberPath="MemberAndName" Height="26"/>
         <ComboBox HorizontalAlignment="Left" Margin="94,41,0,0" VerticalAlignment="Top" Width="120"
                   ItemsSource="{Binding Path=LinguisticVariables}" SelectedItem="{Binding Path=SelectedSummarizer1}" DisplayMemberPath="MemberAndName" Height="26"/>
-        <ComboBox HorizontalAlignment="Left" Margin="94,103,0,0" VerticalAlignment="Top" Width="120"
+        <ComboBox HorizontalAlignment="Left" Margin="94,204,0,0" VerticalAlignment="Top" Width="120"
                   ItemsSource="{Binding Path=LinguisticVariables}" SelectedItem="{Binding Path=SelectedSummarizer2}" DisplayMemberPath="MemberAndName" Height="26"/>
         <Label Content="Qualifier" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Summarizer1" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-        <Label Content="Summarizer2" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
-        <Button Content="Generate" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="204" Command="{Binding GenerateCommand}" Height="50"/>
+        <Label Content="Summarizer2" HorizontalAlignment="Left" Margin="10,204,0,0" VerticalAlignment="Top"/>
+        <Button Content="Generate" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="204" Command="{Binding GenerateCommand}" Height="50" FontWeight="SemiBold"/>
         <ScrollViewer Margin="219,36,10,10" >
             <TextBlock TextWrapping="Wrap" Text="{Binding Output, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" />
         </ScrollViewer>
 
-        <Button Content="Save output" HorizontalAlignment="Left" VerticalAlignment="Top" Width="204" Margin="10,244,0,0" Command="{Binding SaveCommand}" Height="50"/>
-        <Label Content="And/Or" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" Margin="94,73,0,0" VerticalAlignment="Top" Width="120"
+        <Button Content="Save output" HorizontalAlignment="Left" VerticalAlignment="Top" Width="204" Margin="10,359,0,0" Command="{Binding SaveCommand}" Height="50" FontWeight="SemiBold"/>
+        <Label Content="And/Or" HorizontalAlignment="Left" Margin="10,173,0,0" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Left" Margin="94,174,0,0" VerticalAlignment="Top" Width="120"
                   ItemsSource="{Binding Path=Andor}" SelectedItem="{Binding Path=SelectedFunction}" DisplayMemberPath="Name" Height="25"/>
-        <Button Content="Generate with complex summarizer" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="204" Command="{Binding Generate2Command}" Height="50"/>
-        <Label Content="Linguistic summarizations:" Margin="219,10,10,0" VerticalAlignment="Top"/>
+        <Button Content="Generate with complex summarizer" HorizontalAlignment="Left" Margin="10,235,0,0" VerticalAlignment="Top" Width="204" Command="{Binding Generate2Command}" Height="50" FontWeight="SemiBold"/>
+        <Label Content="Linguistic summarizations:" Margin="219,10,10,0" VerticalAlignment="Top" FontSize="15"/>
     </Grid>
 </Window>
