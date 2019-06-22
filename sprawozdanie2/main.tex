@@ -11,10 +11,15 @@
 \usepackage{lscape}
 \usepackage{icomma}
 \usepackage{graphicx}
+\usepackage{eurosym}
+\usepackage{hyperref}
 
 \newcommand{\card}{\mathrm{card}}
 \renewcommand{\labelitemi}{\textbullet}
 \renewcommand{\arraystretch}{1.333}
+{\theoremstyle{definition}
+  \newtheorem{definition}{Definicja}
+}
 
 \graphicspath{{graphs}}
 
@@ -40,281 +45,526 @@
 
 
 \section{Cel}
-Zadanie polega na stworzeniu aplikacji desktopowej przy użyciu dowolnego formatu bazy danych. W ogólności, aplikacja ma charakter systemu doradczego, który generuje pewną ilość podsumowań lingwistycznych dla podanej bazy, a następnie przedstawia użytkownikowi wybrane – najlepsze wg zastosowanych miar jakości – wyniki, czyli podsumowania lingwistyczne. Aplikacja umożliwiać ma automatyczne generowanie podsumowań lingwistycznych służących do tworzenia krótkich wiadomości tekstowych na podstawie dużej relacyjnej bazy danych. \cite{tresc}
+"Zadanie polega na stworzeniu aplikacji desktopowej przy użyciu dowolnego formatu bazy danych. W ogólności, aplikacja ma charakter systemu doradczego, który generuje pewną ilość podsumowań lingwistycznych dla podanej bazy, a następnie przedstawia użytkownikowi wybrane – najlepsze wg zastosowanych miar jakości – wyniki, czyli podsumowania lingwistyczne. Aplikacja umożliwiać ma automatyczne generowanie podsumowań lingwistycznych służących do tworzenia krótkich wiadomości tekstowych na podstawie dużej relacyjnej bazy danych." \cite{tresc}
 
+\section{Wprowadzenie}
+Kwestią jaką zajmowaliśmy się w ramach projektu była analiza funkcjonowania lingwistycznych podsumowań baz danych na zbiorach rozmytych. Zbiór rozmyty jest fundamentalnym terminem wykorzystywanym przy naszym projekcie, wobec tego przytoczmy jego definicję:
 
-\section{Opis bazy}
+\begin{definition}Niech \(\mathcal{X}\) będzie zbiorem, którego elementy interesują
+nas w sposób bezpośredni czyli jest ,,zbiorem zwykłym''.
+Wówczas \emph{zbiorem rozmytym opisanym na \(\mathcal{X}\)}
+nazywamy każdy zbiór \(A\) postaci:
+\[A = \bigcup_{x \in \mathcal{X}} \{(x,\, \mu_A(x))\},\]
+gdzie \(\mu_A(x) : \mathcal{X} \to [0,\,1]\) nazywamy \emph{funkcją
+przynależności do zbioru rozmytego \(A\)}.
+\end{definition}
+
+\textbf{Funkcja przynależności} definiuje w jakim stopniu dany element przynależy do zbioru. W zbiorach rozmytych zakres wartości jakie może ona przyjmować jest rozszerzony do przedziału [0,1]. W naszym projekcie skorzystaliśmy z funkcji przynależności \emph{trójkątnej} oraz \emph{trapezoidalnej}. Przytoczmy ich definicje:
+
+\begin{definition}[Zbiór rozmyty o trójkątnej funkcji przynależności]
+Zbiór rozmyty \(A\) opisany na przestrzeni \(\mathbb{R}\) jest
+\emph{liczbą rozmytą trójkątną o parametrach \(a, b, c\)} wtedy i tylko
+wtedy, gdy \(a \leq b \leq c\) oraz:
+
+\[\mu_A(x) = \begin{cases}
+0                 & \mbox{gdy } x \in (-\infty,\, a], \\
+(x - a) / (b - a) & \mbox{gdy } x \in (a,\, b), \\
+1                 & \mbox{gdy } x = b, \\
+(c - x) / (c - b) & \mbox{gdy } x \in (b,\, c), \\
+0                 & \mbox{gdy } x \in [c,\, +\infty).
+\end{cases}\]
+\end{definition}
+
+\vspace\baselineskip
+
+\begin{definition}[Zbiór rozmyty o trapezoidalnej funkcji przynależności]
+Zbiór rozmyty \(A\) opisany na przestrzeni \(\mathbb{R}\) jest
+\emph{liczbą rozmytą trapezoidalną o parametrach \(a, b, c, d\)} wtedy i tylko
+wtedy, gdy \(a \leq b \leq c \leq d\) oraz:
+
+\[\mu_A(x) = \begin{cases}
+0                 & \mbox{gdy } x \in (-\infty,\, a], \\
+(x - a) / (b - a) & \mbox{gdy } x \in (a,\, b), \\
+1                 & \mbox{gdy } x \in [b,\, c], \\
+(d - x) / (d - c) & \mbox{gdy } x \in (c,\, d), \\
+0                 & \mbox{gdy } x \in [d,\, +\infty).
+\end{cases}\]
+\end{definition}
+
+\vspace\baselineskip
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{{/przyklad_funkcji.png}}
+	\caption{Przykład funkcji przynależności - trójkątnej oraz trapezoidalnej \cite{funkcje}}
+\end{figure}
+
+\section{Opis implementacji}
+Program został stworzony przy użyciu .NET Framework w języku C\#. Graficzny interfejs powstał przy wykorzystaniu Windows Presentation Foundation. Cały projekt został napisany zgodnie ze wzorcem architektonicznym Model–view–viewmodel (MVVM), w związku z tym powstały trzy warstwy Logic, ViewModel i GUI.
+
+\subsection{Logic}
+Warstwa odpowiedzialna za logikę aplikacji. Klasa reprezentująca krotkę w bazie (\emph{Player.cs}), zaimplementowane zostały: funkcje przynależności trójkątna (\emph{TriangularFunction.cs}) oraz trapezoidalna (\emph{TrapezoidFunction}), zmienna lingwistyczna (\emph{LinguisticVariable.cs}), kwantyfikator (\emph{StaticQuantifiers.cs}), zmienna, która ”na sztywno” określa nasz kwantyfikator (np. słaby, przeciętny, dobry) w zależności od podanych danych (\emph{StaticVariables.cs}), sumaryzator ”i” (\emph{And.cs}), a także sumaryzator ”lub” (\emph{Or.cs}). W tej warstwie znajduje się także klasa (\emph{Measures.cs}), gdzie zawarliśmy wszystkie 11 miar jakości podsumowań.
+\subsection{ViewModel}
+Klasa MainViewModel przyjmuje dane wejściowe od użytkownika i reaguje na jego poczynania wywołując wybrane akcje z logiki programu oraz odpowiada za odświeżanie widoków w interfejsie graficznym.
+\subsection{GUI}
+Przejrzysty interfejs użytkownika który ma kontrole nad kwalifikatorem, sumaryzatorem (również złożonym OR/AND), generowaniem podsumowań oraz zapisem do pliku.
+
+\section{Miary jakości}
+Do określenia jakości podsumowania lingwistycznego zaimplementowaliśmy następujące miary jakości, których wzory zostały zaczerpnięte z \cite{adam}.
+\begin{itemize}
+    \item T1 (Degree of truth) - Suma przynależności wszystkich rozważanych krotek do podsumowania lingwistycznego.
+    \item T2 (Degree of imprecision) - Określa stopień precyzyjności sumaryzatora (miarę jakości podsumowania określaną).
+    \item T3 (Degree of covering) - Reprezentuje stopień w jakim nośnik sumaryzatora pokrywa się z nośnikiem kwalifikatora.
+    \item T4 (Degree of appropriateness) - Definiuje jak dużo krotek przynależy do sumaryzatora, czyli czy dane podsumowanie jest właściwe dla zestawu danych.
+    \item T5 (Length of summary) - Określa jakość podsumowania na podstawie złożoności sumaryzatora, więc im więcej składowych sumaryzatora złożonego, tym mniejsza wartość owej miary.
+    \item T6 (Degree of quantifier imprecision) - Pokazuje w jakim stopniu precyzyjny jest kwantyfikator. Im mniejszy nośnik zbioru rozmytego tym wyższa jest jego precyzja.
+    \item T7 (Degree of quantifier cardinality) - Opisuje stopień precyzji kwantyfikatora, im mniejsza kardynalność kwantyfikatora tym jest on bardziej precyzyjny.
+    \item T8 (Degree of summarizer cardinality) - Opisuje stopień precyzji sumaryzatora, im mniejsza kardynalność kwantyfikatora tym jest on bardziej precyzyjny.
+    \item T9 (Degree of qualifier imprecision) - Określa w jakim stopniu precyzyjny jest kwalifikator. Im szerszy nośnik zbioru rozmytego tym niższa jest jego precyzja, gdyż bierze pod uwagę większy zakres wartości.
+    \item T10 (Degree of qualifier cardinality) - Opisuje stopień precyzji kwalifikatora, im większa jest kardynalność kwalifikator tym jest on mniej precyzyjny.
+    \item T11 (Length of qualifier) - Wyznacza jakość podsumowania na podstawie złożoności kwalifikatora. Im bardziej złożony kwalifikator tym jakość podsumowania gorsza.
+\end{itemize}
+\section{Materiały i metody}
+\subsection{Baza danych}
 Do realizacji zadania wybraliśmy bazę danych \emph{Fifa 19} \cite{data}. Wybrana baza
-składa się z \(18128\) krotek znajdujących się w tabeli z \(10\) kolumnami różnych typów. Dane reprezentują piłkarzy w najnowszej odsłonie gry komputerowej Fifa 19.\\ Do tworzenia podsumowań
+składa się z \(18128\) krotek znajdujących się w tabeli z \(10\) kolumnami różnych typów. Przechowuje ona statystyki piłkarzy z gry Fifa 2019.\\ Do tworzenia podsumowań
 korzystamy z kolumn:
-\begin{enumerate}
-    \item Age - wiek
-    \item Overall - całkowita ocena zawodnika
-    \item Value - wartość zawodnika
-    \item Wage - zarobki
-    \item Height - wzrost
-    \item Weight - waga
+\begin{itemize}
+    \item Age - wiek [Lata]
+    \item Overall - ocena całkowita zawodnika
+    \item Value - wartość zawodnika [\euro]
+    \item Wage - zarobki [\euro]
+    \item Height - wzrost [Stopy i Cale]
+    \item Weight - waga [Funty]
     \item FKAccuracy - (free kicks accuracy) - efektywność rzutów wolnych (procent bramek z rzutów wolnych)
     \item SprintSpeed - szybkość w sprincie
     \item Stamina - wytrzymałość
     \item Strength - siła
-\end{enumerate}
+\end{itemize}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=13cm]{/select_baza.png}
     \caption{Fragment widoku tabeli}
 \end{figure}
-\section{Diagram klas}
+\subsection{Sumaryzatory i kwalifikatory}
+Poniżej zaprezentowaliśmy poszczególne sumaryzatory oraz kwalifikatory wykorzystane w naszym programie. 
 
-\section{Implementacja}
-Zaimplementowaliśmy następujące miary. (Wzory zostały wzięte z \cite{adam})
-Do obliczania całkowitej miary jakości wykorzystujemy sumę ważoną wszystkich 11 miar. Każda miara ma ustawioną swoją wagę, których suma jest równa 1. T1 ma ustawioną najwyższą wagę równą 7/10, zaś reszta miar taką samą, równą 3/100.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c} &  \textbf{d} \\ [0.5ex] 
+		\hline
+		\hline 
+		Young & 15 & 16 & 17 & 20 \\ 
+		Adult & 19 &  23 &  27 &  31 \\
+		Old &  30 &  35 &  45 &  51 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla wieku.}
+\end{table}
 
-\subsection{Miary jakości podsumowań lingwistycznych}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c} &  \textbf{d} \\ [0.5ex] 
+		\hline
+		\hline 
+		Low Overall & 46 &  50 &  55 &  60\\
+		Medium Overall & 59 &  64 &  70 &  75\\
+		Good Overall &   74 &  80 &  85 &  94 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla wyniku ogólnego.}
+\end{table}
 
-\subsubsection{\(T_1\) -- stopień prawdziwości}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c}  \\ [0.5ex] 
+		\hline
+		\hline 
+		Low Value & 0 &  30 &  60 &  100 \\ 
+		Medium Value & 99 &  200 &  400 &  600 \\
+		High Value &  599 &  750 &  850 &  975 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla wartości piłkarza.}
+\end{table}
 
-Najbardziej naturalną miarą jakości podsumowania lingwistycznego
-jest wprowadzony przez Yagera stopień prawdziwości.
-Abstrahując od tego, czy sumaryzator \(S_j\) jest wynikiem
-złożenia wielu sumaryzatorów czy nie, możemy obliczyć
-sumę przynależności wszystkich rozważanych krotek do niego:
-\[r = \sum_{i=1}^{m} \mu_{\mathrm{ce}(S_j)}(d_i) ~\mbox{,}\]
-gdzie \(\mathrm{ce}(S_j)\) jest rozszerzeniem cylindrycznym
-sumaryzatora \(S_j\), tak aby otrzymać zbiór rozmyty na uniwersum
-możliwych krotek.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c}  \\ [0.5ex] 
+		\hline
+		\hline 
+		Low Wage & 0 &  2 &  4 &  6 \\ 
+		Medium Wage & 5 &  7 &  9 &  12 \\
+		High Wage &  11 &  50 &  90 &  110 \\
+		Very High Wage &  109 &  250 &  400 &  565 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla zarobków.}
+\end{table}
 
-Liczbę wszystkich krotek konsekwentnie oznaczamy jako \(m\).
-Zatem dla kwantyfikatorów relatywnych stopnień
-prawdziwości możemy zapisać jako \(T_1 = \mu_Q(\frac{r}{m})\),
-zaś dla kwantyfikatorów absolutnych jako \(T_1 = \mu_Q(r)\).
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c}  \\ [0.5ex] 
+		\hline
+		\hline 
+		Short & 153 &  160 & 167 & 172 \\ 
+		Medium HeightTall & 171 & 176 & 181 & 185 \\
+		Tall & 184 & 190 & 200 & 207 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla wzrostu.}
+\end{table}
 
-W przypadku podsumowań z kwalifikatorem wystarczy uwzględnić
-przynależność do \(W\) przy liczeniu \(r\), oraz zamiast \(m\)
-w mianowniku dla kwantyfikatorów relatywnych zastosować
-sumę przynależności wszystkich krotek do \(W\).
-
-\subsubsection{\(T_2\) -- stopień nieprecyzyjności [sumaryzatora]}
-Dla podsumowania z \(n\) sumaryzatorami \(S_1 \ldots S_n\)
-(w szczególności dla \(n=1\)) możemy określić miarę
-jakości podsumowania określaną jako stopień nieprecyzyjności,
-definiowaną następującym wzorem:
-\[T_2 = 1 - \left(\prod_{j=1}^{n} \mathrm{in}(S_j)\right)^{1/n} ~\mbox{.}\]
-Wyrażenie \(\left(\prod_{j=1}^{n} \mathrm{in}(S_j)\right)^{1/n}\) to po prostu
-średnia geometryczna ze stopni rozmycia wykorzystanych sumaryzatorów.
-
-\subsubsection{\(T_3\) -- stopień pokrycia}
-Miara \(T_3\) dotyczy pewnych własności kwalifikatora,
-zatem oczywiście ma sens tylko dla podsumować z kwalifikatorem.
-Dla każdego \(i=1\ldots m\) (związanego z krotką \(d_i\) z bazy
-danych) możemy zdefiniować:
-\[
-\begin{array}{l}
-t_i = \begin{cases} 1 & \mbox{gdy } \mu_{\mathrm{ce}(S_j)}(d_i) > 0 ~ \wedge ~ \mu_{W}(d_i) > 0 \\
-0 & \mbox{w przeciwnym wypadku.}
-\end{cases} \\
-h_i = \begin{cases}
-1 & \mbox{gdy } \mu_{W}(d_i) > 0 \\
-0 & \mbox{w przeciwnym wypadku.}
-\end{cases}
-\end{array}\]
-
-Przy powyższych oznaczeniach:
-\[T_3 = \frac{\sum_{i=1}^{m} t_i}{\sum_{i=1}^{m} h_i} ~\mbox{.}\]
-
-\subsubsection{\(T_4\) -- stopień stosowności}
-Dla podsumowania z \(n\) sumaryzatorami \(S_1 \ldots S_n\)
-oraz \(m\) krotkami w bazie danych możemy wprowadzić oznaczenia:
-\[g_{ij} = \begin{cases}
-1 & \mbox{gdy } \mu_{\mathrm{ce}(S_j)}(d_i) > 0 \\
-0 & \mbox{w przeciwnym wypadku.}
-\end{cases}\]
-oraz
-\[r_j = \frac{\sum_{i=1}^{m} g_{ij}}{m} ~\mbox{.}\]
-Wówczas możemy zapisać:
-\[T_4 = \left|\left( \prod_{j=1}^{n} r_j \right) - T_3\right| ~\mbox{.}\]
-
-\subsubsection{\(T_5\) -- długość podsumowania}
-Dla podsumowania z \(n\) sumaryzatorami \(S_1 \ldots S_n\)
-miarę długości podsumowania definiujemy jako:
-\[T_5 = 2\left(\frac{1}{2}\right)^{n} ~\mbox{.}\]
-
-\subsubsection{\(T_6\) -- stopień nieprecyzyjności kwantyfikatora}
-Nazwy miar \(T_6\)--\(T_{10}\) można określić jako samoopisujące się,
-więc przedstawienie wzoru wyczerpuje zagadnienie w stopniu wystarczającym
-dla niniejszego sprawozdania:
-\[T_6 = 1-\mathrm{in}(Q) ~\mbox{.}\]
-
-\subsubsection{\(T_7\) -- stopień liczności kwantyfikatora}
-W przeciwieństwie do \(T_6\), zamiast zliczać elementy z nośnika \(Q\),
-policzymy moc zbioru rozmytego:
-\[T_7 = 1-\frac{\card(Q)}{\card(\mathcal{X}_Q)} ~\mbox{.}\]
-
-\subsubsection{\(T_8\) -- stopień liczności sumaryzatora}
-Możemy mieć do czynienia z sumaryzatorem złożonym; wtedy,
-podobnie jak przy poprzednich miarach, stosujemy średnią geometryczną.
-Dla podsumowania z \(n\) sumaryzatorami \(S_1 \ldots S_n\):
-
-\[T_8 = 1- \left(\prod_{j=1}^{n} \frac{\card(S_j)}{\card(\mathcal{X}_j)}\right) ~\mbox{.}\]
-
-\subsubsection{\(T_9\) -- stopień nieprecyzyjności kwalifikatora}
-Stopień precyzji kwalifikatora \(T_9\) jest oparty na drugiej formie podsumowań tzn.: Q obiektów będących/mających W jest/ma S, gdzie W jest reprezentowane przez zbiór rozmyty i jest kwalifikatorem. Definicja tej miary jest następująca:
-\[T_9 = 1-\mathrm{in}(W) ~\mbox{.}\]
-
-\subsubsection{\(T_{10}\) -- stopień liczności kwalifikatora}
-Stopień kardynalności kwalifikatora \(T_{10}\) definiujemy jako:
-\[T_{10} = 1-\frac{\card(W)}{\card(\mathcal{X}_g)} ~\mbox{.}\]
-gdzie miara $\card()$ jest dana tak jak we wcześniejszych sekcjach.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c}  \\ [0.5ex] 
+		\hline
+		\hline 
+		Light & 110 & 110 & 150 & 155 \\ 
+		Regular & 150 & 160 & 190 & 200 \\
+		Heavy & 195 & 210 & 240 & 255 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla wagi.}
+\end{table}
 
 
-\subsubsection{\(T_{11}\) -- długość kwalifikatora}
-Długość kwalifikatora \(T_{11}\) definiujemy następująco:
-\[T_{11} = 2\left(\frac{1}{2}\right)^{\card({W})} ~\mbox{.}\]
-gdzie $\card(W)$ jest ilością zbiorów rozmytych, z których kwalifikator jest skomponowany. Wniosek jest następujący: im bardziej złożony kwalifikator tym jakość podsumowania gorsza.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c}  \\ [0.5ex] 
+		\hline
+		\hline 
+		Bad Free Kick & 3 & 15 & 30 & 40 \\ 
+		Decent Free Kick & 39 & 46 & 58 & 70 \\
+		Good Free Kick & 69 & 75 & 87 & 94 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla FKAccuracy.}
+\end{table}
 
-\subsection{Funkcje przynależności}
-Dla zmiennych lingwistycznych zdefiniowaliśmy następujące funkcje przy-
-należności:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c}  \\ [0.5ex] 
+		\hline
+		\hline 
+		Bad Sprint & 12 & 20 & 30 & 40 \\ 
+		Decent Sprint & 39 & 47 & 58 & 68 \\
+		Good Sprint & 67 & 75 & 85 & 96 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla szybkości sprintu.}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c}  \\ [0.5ex] 
+		\hline
+		\hline 
+		Bad Stamina & 12 & 19 & 31 & 40 \\ 
+		Decent Stamina & 39 & 45 & 57 & 68 \\
+		Good Stamina & 67 & 75 & 87 & 96 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla wytrzymałości.}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{a} & \textbf{b} & \textbf{c}  \\ [0.5ex] 
+		\hline
+		\hline 
+		Bad Strength & 17 & 25 & 36 & 45 \\ 
+		Decent Strength & 54 & 65 & 74 & 80 \\
+		Good Strength & 79 & 85 & 90 & 97 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry funkcji trapezoidalnej dla siły.}
+\end{table}
+
+\subsection{Kwantyfikatory}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{Funkcja przynależności} & \textbf{a} & \textbf{b} & \textbf{c} &  \textbf{d} \\ 
+		\hline
+		\hline 
+		No & Trójkątna & 0 & 0 & 0.16 & - \\
+		Around 20\% & Trójkątna & 0.14 & 0.2 & 0.26& - \\
+		Around one third & Trójkątna & 0.25 &  0.33 &  0.41 & - \\
+	    Less than a third & Trapezoidalna & 0 &  0 &  0.3 &  0.36\\
+		Around 40\% & Trójkątna &  0.34 &  0.4 &  0.46 & - \\
+		Around half & Trójkątna & 0.4 &  0.5 &  0.6 & - \\
+		Around three quaters & Trójkątna &  0.5 &  0.6 &  0.7 & - \\
+		Majority & Trójkątna & 0.75 &  0.8 &  0.9 & -  \\
+		All & Trapezoidalna & 0.85 &  0.9 &  1 &  1 \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry dla kwantyfikatora względnego.}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c c} 
+		\hline
+		\textbf{Etykieta} & \textbf{Funkcja przynależności} & \textbf{a} & \textbf{b} & \textbf{c} &  \textbf{d} \\ 
+		\hline
+		\hline 
+		Less than 1000 & Trapezoidalna & 0 & 0 & 9990 & 1000 \\ 
+		Around 1500 & Trójkątna & 1400 & 1500 & 1600 & - \\
+		Around 3000 & Trójkątna & 2900 & 3000 & 3100 & - \\
+		More than 5000 & Trapezoidalna & 5000 & 5010 & 5500 & - \\
+		\hline
+	\end{tabular}
+	\caption{Przyporządkowane parametry dla kwantyfikatora absolutnego.}
+\end{table}
+
+\section{Badania}
+Nasze badania postanowiliśmy podzielić na trzy części:
+\begin{enumerate}
+    \item Sprawdzenie jakie wartości przybiorą miary podsumowań dla różnych kwantyfikatorów. 
+    \item Porównanie podsumowań bez i z kwalifikatorem.
+    \item Porównanie podsumowań z jednym sumaryzatorem oraz połączanie ze spójnikami OR i LUB.
+\end{enumerate}
+
+\subsection{Pierwszy eksperyment}
+W tym badaniu wygenerowaliśmy 3 komunikaty, dotyczące odpowiednio zależności pomiędzy:
 \begin{itemize}
-    \item{
-        [Zbiór rozmyty o trapezoidalnej funkcji przynależności]
-        Zbiór rozmyty \(A\) typu I na uniwersum \(\mathbb{R}\) jest
-        \emph{liczbą rozmytą trapezoidalną o parametrach \(a, b, c, d\)} wtedy i tylko
-        wtedy, gdy \(a \leqslant b \leqslant c \leqslant d\) oraz:
-        
-        \[\mu_A(x) = \begin{cases}
-        0                 & \mbox{gdy } x \leqslant a, \\
-        (x - a) / (b - a) & \mbox{gdy } a \leqslant x \leqslant b, \\
-        1                 & \mbox{gdy } b \leqslant x \leqslant c, \\
-        (d - x) / (d - c) & \mbox{gdy } c \leqslant x \leqslant d, \\
-        0                 & \mbox{gdy } d \leqslant x \\
-        \end{cases}\]
-    }
-    \item{
-        [Zbiór rozmyty o trójkątnej funkcji przynależności]
-        Zbiór rozmyty \(A\) typu I na uniwersum \(\mathbb{R}\) jest
-        \emph{liczbą rozmytą trójkątną o parametrach \(a, b, c\)} wtedy i tylko
-        wtedy, gdy \(a \leq b \leq c\) oraz:
-        
-        \[\mu_A(x) = \begin{cases}
-        0                 & \mbox{gdy } x \leqslant a, \\
-        (x - a) / (b - a) & \mbox{gdy } a \leqslant x \leqslant b, \\
-        (c - x) / (c - b) & \mbox{gdy } b \leqslant x \leqslant c, \\
-        0                 & \mbox{gdy } c \leqslant x \\
-        \end{cases}\]
-    }
-    \item{Funkcja dyskretna - funkcja dla której wartości dla poszczególnych argumentów określone są z góry}
+    \item 'BodyweightKg' a 'Sprint Speed'
+    \item 'Height' a 'Wage'
+\end{itemize}
+Miary $T_2-T_5$ oraz $T_8-T{10}$ były stałe dla różnych kwalifikatorów dlatego zostały przez nas pominięte w tabeli oraz na wykresie, ponieważ kwantyfikator nie miał wpływu na ich wartość. Zostały jednak przedstawione pod tabelą porównującą wartości miar $T_1$, $T_6$ i $T_7$. 
+\subsubsection{Eksperyment 1.1}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{{/Badanie11.png}}
+	\caption{Wykres przedstawiający wyniki Eksperymentu 1.1}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{Kwantyfikator} & \textbf{$T_1$} & \textbf{$T_6$} & \textbf{$T_7$}\\ [0.5ex] 
+		\hline
+		\hline 
+        No & 0,00 & 0,84 & 0,92\\
+        Around 20\% & 0,00 & 0,88 & 0,94\\
+        Around one third & 0,00 & 0,84 & 0,92\\
+        Around 40\% & 0,00 & 0,88 & 0,94\\
+        Less than a third & 0,00 & 0,64 & 0,67\\
+        Around half & 0,77 & 0,80 & 0,90\\
+        Around three quaters & 0,23 & 0,80 & 0,90\\
+        Majority & 0,00 & 0,85 & 0,93\\
+        All & 0,00 & 0,85 & 0,88\\
+        Less than 1000 & 1,00 & 0,94 & 0,70\\
+        Around 1500 & 0,00 & 0,99 & 0,99\\
+        Around 3000 & 0,00 & 0,99 & 0,99\\
+        More than 5000 & 0,00 & 0,97 & 0,97\\
+		\hline
+	\end{tabular}
+	\caption{Tabela przedstawiający wyniki Eksperymentu 1.1}
+\end{table}
+
+Uzyskane miary, które były jednakowe dla każdego kwantyfikatora: $T_2 = 0.508$, $T_3 = 0.669$, $T_4 = 0.669$, $T_5 = 1$, $T_8 = 0.999$, $T_9 = 0.728$, $T_{10} = 0.998$, $T_{11} = 1$.
+
+\subsubsection{Eksperyment 1.2}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{{/Badanie12.png}}
+	\caption{Wykres przedstawiający wyniki Eksperymentu 1.2}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c} 
+		\hline
+		\textbf{Kwantyfikator} & \textbf{$T_1$} & \textbf{$T_6$} & \textbf{$T_7$}\\ [0.5ex] 
+		\hline
+		\hline 
+        No & 0,47 & 0,84 & 0,92\\
+        Around 20\% & 0,00 & 0,88 & 0,94\\
+        Around one third & 0,00 & 0,84 & 0,92\\
+        Around 40\% & 0,00 & 0,88 & 0,94\\
+        Less than a third & 1,00 & 0,64 & 0,67\\
+        Around half & 0,00 & 0,80 & 0,90\\
+        Around three quaters & 0,00 & 0,80 & 0,90\\
+        Majority & 0,00 & 0,85 & 0,93\\
+        All & 0,00 & 0,85 & 0,88\\
+        Less than 1000 & 1,00 & 0,94 & 0,70\\
+        Around 1500 & 0,00 & 0,99 & 0,99\\
+        Around 3000 & 0,00 & 0,99 & 0,99\\
+        More than 5000 & 0,00 & 0,97 & 0,97\\
+        \hline
+	\end{tabular}
+	\caption{Tabela przedstawiający wyniki Eksperymentu 1.1}
+\end{table}
+
+Uzyskane miary, które były jednakowe dla każdego kwantyfikatora: $T_2 = 0.804$, $T_3 = 0.189$, $T_4 = 0.189$, $T_5 = 1$, $T_8 = 0.996$, $T_9 = 0.922$, $T_{10} = 0.999$, $T_{11} = 1$.
+
+\subsection{Drugi eksperyment}
+W tym badaniu wygenerowaliśmy podsumowanie dotyczące FK Accuracy. Sprawdziliśmy jak obecność kwalifikatora (Age: Adult) wpłynęła na wartości miar.
+Miary $T_9-T_{11}$ zależały od kwalifikatora - nie dało się ich obliczyć bez niego, dlatego nie były porównywane w tym badaniu.
+\subsubsection{Eksperyment 2.1}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/Badanie211.png}
+	\caption{Wykres przedstawiający wyniki Eksperymentu 2.1 - kwantyfikator względny}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c} 
+		\hline
+		\textbf{Miara} & \textbf{Słaby balans} & \textbf{Brak kwalifikatora}\\ [0.5ex] 
+		\hline
+		\hline 
+        $T_1$ & 0,587 & 0,948\\
+        $T_2$ & 0,527 & 0,527\\
+        $T_3$ & 0,484 & 0,473\\
+        $T_4$ & 0,484 & 0,473\\
+        $T_5$ & 1,000 & 1,000\\
+        $T_6$ & 0,840 & 0,840\\
+        $T_7$ & 0,920 & 0,920\\
+        $T_8$ & 0,999 & 0,999\\
+		\hline
+	\end{tabular}
+	\caption{Tabela przedstawiająca wyniki Eksperymentu 2.1 - kwantyfikator względny (około 2/3 piłkarzy)}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth]{/Badanie212.png}
+	\caption{Wykres przedstawiający wyniki Eksperymentu 2.1 - kwantyfikator bezwzględny}
+\end{figure}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c } 
+		\hline
+		& \textbf{Słaby balans} & \textbf{Brak kwalifikatora}\\ [0.5ex]
+		\textbf{Miara} & \textbf{Około 500} & \textbf{Więcej niż 1000}\\ [0.5ex]
+		\hline
+		\hline 
+        $T_1$ & 0,000 & 1,000\\
+        $T_2$ & 0,527 & 0,527\\
+        $T_3$ & 0,484 & 0,473\\
+        $T_4$ & 0,484 & 0,473\\
+        $T_5$ & 1,000 & 1,000\\
+        $T_6$ & 0,989 & 0,945\\
+        $T_7$ & 0,994 & 0,697\\
+        $T_8$ & 0,999 & 0,999\\
+		\hline
+	\end{tabular}
+	\caption{Tabela przedstawiająca wyniki Eksperymentu 2.1 - kwantyfikator bezwzględny}
+\end{table}
+
+\subsection{Trzeci eksperyment}
+W tym badaniu wygenerowaliśmy podsumowania dotyczące dorosłych piłkarzy, którzy mają:
+\begin{itemize}
+    \item Bad Strength
+    \item Bad Stamina
+    \item Bad Strength AND Bad Stamina
+    \item Bad Strength OR Bad Stamina
 \end{itemize}
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=10cm]{/wykres1.png}
-    \caption{Wykres funkcji trapezoidalnej dla a=1, b=5, c=9, d=9}
+	\centering
+	\includegraphics[width=1\textwidth]{/Badanie31.png}
+	\caption{Wykres przedstawiający wyniki Eksperymentu 3 - kwantyfikator względny}
 \end{figure}
+
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c } 
+		\hline
+		\textbf{Miara} & \textbf{Bad Strength} & \textbf{Bad Stamina} & \textbf{ORAZ} & \textbf{LUB}\\ [0.5ex] 
+		\hline
+		\hline 
+            $T_1$ & 1,00 & 1,00 & 1,00 & 1,00\\
+            $T_2$ & 0,82 & 0,89 & 0,00 & 0,00\\
+            $T_3$ & 0,16 & 0,09 & 0,03 & 0,22\\
+            $T_4$ & 0,16 & 0,09 & 0,00 & 0,05\\
+            $T_5$ & 1,00 & 1,00 & 0,50 & 0,50\\
+            $T_6$ & 0,67 & 0,67 & 0,67 & 0,67\\
+            $T_7$ & 0,67 & 0,67 & 0,67 & 0,67\\
+            $T_8$ & 1,00 & 1,00 & 1,00 & 1,00\\
+            $T_9$ & 0,26 & 0,26 & 0,26 & 0,26\\
+            $T_{10}$ & 1,00 & 1,00 & 1,00 & 1,00\\
+            $T_{11}$ & 1,00 & 1,00 & 1,00 & 1,00\\
+		\hline
+	\end{tabular}
+	\caption{Tabela przedstawiająca wyniki Eksperymentu 3 - kwantyfikator względny (mniej niż 1/3 dorosłych piłkarzy)}
+\end{table}
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=10cm]{/wykres2.png}
-    \caption{Wykres funkcji trójkątnej dla a=2, b=5, c=7}
+	\centering
+	\includegraphics[width=1\textwidth]{/Badanie32.png}
+	\caption{Wykres przedstawiający wyniki Eksperymentu 3 - kwantyfikator względny}
 \end{figure}
 
-\subsection{Zmienne lingwistyczne}
-W ramach zadania należało stworzyć zmienne lingwistyczne dla kolejnych kolumn bazy danych z etykietami i przyporządkowanymi im zbiorami rozmytymi. Zmienne podzieliliśmy na dwie grupy:
-\begin{itemize}
-    \item{kwalifikatory i sumaryzatory - używane w programie wymiennie}
-    \item{kwantyfikatory}
-\end{itemize}
 
-\subsubsection{Kwalifikatory i sumaryzatory}
-Poniżej wymienione zostały poszczególne kwalifikatory i sumaryzatory
-wedle schematu:
-Nazwa zmiennej lingwistycznej - użyta funkcja przynależności A następnie tabela z przyporządkowanymi paramterami funkcji dla poszczególnych etykiet. (Przy funkcjach dyskretnych tabela ma rozpisane przypadki
-wartości danych kolumn)
-\begin{enumerate}
-    \item Age - Funkcja trapezoidalna
-    \begin{center}
-        \begin{tabular}{|c|c|c|c|c|}
-            \hline
-            Etykieta & a & b & c & d\\
-            \hline
-            Young & 8 & 8 & 17 & 20\\
-            \hline
-            Young Adult & 19 & 23 & 27 & 31\\
-            \hline
-            Adult & 30 & 35 & 45 & 51\\
-            \hline
-            Old & 50 & 60 & 90 & 90\\
-            \hline
-        \end{tabular}
-    \end{center}
-    \item Overall - Funkcja
-    \item Value - Funkcja
-    \item Wage - Funkcja
-    \item Height - Funkcja
-    \item Weight - Funkcja
-    \item FKAccuracy - Funkcja
-    \item SprintSpeed - Funkcja
-    \item Stamina - Funkcja
-    \item Strength - Funkcja
-\end{enumerate}
-\subsubsection{Kwantyfikatory}
-Kwalifikatory podzielone są na dwa typy:
-\begin{itemize}
-    \item{względne}
-    \item{bezwzględne}
-\end{itemize}
-Dla każdego typu została zamieszczona tabela ze stworzonymi etykietami,
-funkcjami przynależności oraz ich parametrami ( ”-” oznacza brak danego
-parametru)
-\begin{enumerate}
-    \item{Kwantyfikatory względne}\\
-        \begin{center}
-        \begin{tabular}{|c|c|c|c|c|c|}
-            \hline
-            Etykieta & Funkcja & a & b & c & d\\
-            \hline
-            No & Trójkątna & 0 & 0 & 0.15 & -\\
-            \hline
-            Less than a third & Trapezoid & 0 & 0 & 0.3 & 0.35\\
-            \hline
-            Around half & Trójkątna & 0.4 & 0.5 & 0.6 & -\\
-            \hline
-            Majority & Trójkątna & 0.75 & 0.8 & 0.9 & -\\
-            \hline
-            All & Trapezoid & 0.85 & 0.9 & 1 & 1\\
-            \hline
-        \end{tabular}
-    \end{center}
-    
-    \item{Kwantyfikatory bezwzględne}\\
-            \begin{center}
-        \begin{tabular}{|c|c|c|c|c|c|}
-            \hline
-                Etykieta & Funkcja & a & b & c & d \\
-            \hline
-                Less than 5000 & Trapezoid & 0 & 0 & 4990 & 5000 \\
-                Around 15000 & Trójkątna & 14000 & 15000 & 16000 & - \\
-                Around 25000 & Trójkątna & 24000 & 25000 & 26000 & - \\
-                More than 35000 & Trapezoid & 35000 & 35010 & 41000 & 41000 \\
-            \hline
-        \end{tabular}
-    \end{center}
-
-    
-    
-    
-\end{enumerate}
-
-
-\section{Interfejs użytkownika}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{c c c c c } 
+		\hline
+		\textbf{Miara} & \textbf{Bad Strength} & \textbf{Bad Stamina} & \textbf{ORAZ} & \textbf{LUB}\\ [0.5ex] 
+		\hline
+		\hline 
+            $T_1$ & 0,00 & 0,00 & 0,00 & 1,00\\
+            $T_2$ & 0,82 & 0,89 & 0,00 & 0,00\\
+            $T_3$ & 0,16 & 0,09 & 0,03 & 0,22\\
+            $T_4$ & 0,16 & 0,09 & 0,00 & 0,05\\
+            $T_5$ & 1,00 & 1,00 & 0,50 & 0,50\\
+            $T_6$ & 0,99 & 0,99 & 0,97 & 0,70\\
+            $T_7$ & 0,99 & 0,99 & 0,97 & 0,70\\
+            $T_8$ & 1,00 & 1,00 & 1,00 & 1,00\\
+            $T_9$ & 0,26 & 0,26 & 0,26 & 0,26\\
+            $T_{10}$ & 1,00 & 1,00 & 1,00 & 1,00\\
+            $T_{11}$ & 1,00 & 1,00 & 1,00 & 1,00\\
+		\hline
+	\end{tabular}
+	\caption{Tabela przedstawiająca wyniki Eksperymentu 3 - kwantyfikator względny (mniej niż 1/3 dorosłych piłkarzy)}
+\end{table}
 
 \section{Dyskusja}
 
+\subsection{Wpływ kwantyfikatora na miary}
+
+\subsection{Wpływ kwalifikatora na miary}
+
+\subsection{Wpływ sumaryzatora na miary}
+
+\subsection{Inne spostrzeżenia}
+
+
 \section{Wnioski}
 \begin{itemize}
-\item Podsumowania lingwistyczne są bardzo dobrą 
+\item Podsumowania lingwistyczne są bardzo dobrą sprawa
 \end{itemize}
 
 \begin{thebibliography}{}
@@ -322,7 +572,7 @@ parametru)
     A. Niewiadomski,
     \emph{Komputerowe Systemy Rozpoznawania: Materiały, przykłady i ćwiczenia do przedmiotu}.
     21 września 2009.
-    http://ics.p.lodz.pl/~aniewiadomski/ksr/ksr-projekt2.pdf
+    \url{http://ics.p.lodz.pl/~aniewiadomski/ksr/ksr-projekt2.pdf}
     \bibitem{data}
     Baza danych - "FIFA 19 complete player dataset":\\
     \url{https://www.kaggle.com/karangadiya/fifa19}    
@@ -335,6 +585,7 @@ parametru)
     \emph{Methods for the Linguistic Summarization of Data: Applications of Fuzzy Sets and Their Extensions}.
     Akademicka Oficyna Wydawnicza EXIT,
     Warszawa 2008.
-    
+\bibitem{funkcje}
+    \url{http://zsi.tech.us.edu.pl/~nowak/si/w2_2013.pdf}
 \end{thebibliography}
 \end{document}
