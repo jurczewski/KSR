@@ -87,7 +87,7 @@ namespace ViewModel
 
         private string GetQualifierString(string name)
         {
-            return name.Equals("Every: Every") ? "" : " of people being/having " + name;
+            return name.Equals("Every: Every") ? "" : " of soccer players being/having " + name;
         }
 
         private KeyValuePair<double, (string, List<double>)> CreateSummaryPair(LinguisticVariable quantifier, LinguisticVariable summarizer, string summary)
@@ -107,7 +107,7 @@ namespace ViewModel
             SelectedFunction.FuzzySet.SetAllFuzzySets(new List<FuzzySet> { SelectedSummarizer1.FuzzySet, SelectedSummarizer2.FuzzySet });
             foreach (LinguisticVariable quantifier in quantifiers)
             {
-                string summary = quantifier.Name + " of people being/having " + SelectedQualifier.MemberAndName + " are/have " +
+                string summary = quantifier.Name + " of soccer players being/having " + SelectedQualifier.MemberAndName + " are/have " +
                     SelectedSummarizer1.MemberAndName + SelectedFunction.Name + SelectedSummarizer2.MemberAndName;
                 var pair = CreateSummaryPair(quantifier, SelectedFunction, summary);
                 Summaries.Add(pair);
