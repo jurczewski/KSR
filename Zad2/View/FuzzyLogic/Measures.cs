@@ -138,7 +138,8 @@ namespace View.FuzzyLogic
         //T6
         public static double DegreeOfQuantifierImprecision(LinguisticVariable quantificator, LinguisticVariable qualifier, LinguisticVariable summarizer, List<Player> entries)
         {
-            var ret = quantificator.MembershipFunction.Cardinality();
+            var ret = (quantificator.MembershipFunction.Parameters.Last()
+                       - quantificator.MembershipFunction.Parameters.First());
 
             if (quantificator.Absolute)
             {
