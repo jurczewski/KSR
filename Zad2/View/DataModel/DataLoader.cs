@@ -7,7 +7,7 @@ namespace Zad2
     {
         public static void LoadData(ref List<Player> players)
         {
-            var connectionString = @"Server=.;Integrated Security=true;Initial Catalog=ksr;";
+            var connectionString = @"Server=.\SQLExpress;Integrated Security=true;Initial Catalog=ksr;";
 
             var query = "SELECT Id, Age, Overall, Value, Wage, Height, Weight, FKAccuracy, SprintSpeed, Stamina, Strength FROM [data]";
 

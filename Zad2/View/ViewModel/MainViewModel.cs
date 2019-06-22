@@ -5,8 +5,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Input;
 using View.FuzzyLogic;
+using Microsoft.Win32;
+using System;
 using Zad2;
 using Zad2.FuzzyLogic;
+using System.Threading.Tasks;
 
 namespace ViewModel
 {
@@ -72,12 +75,18 @@ namespace ViewModel
             Summaries = new List<KeyValuePair<double, (string, List<double>)>>();
             foreach (LinguisticVariable quantifier in quantifiers)
             {
-                string summary = quantifier.Name + " of people being/having " + SelectedQualifier.MemberAndName + " are/have " + SelectedSummarizer1.MemberAndName;
+                string w = GetQualifierString(SelectedQualifier.MemberAndName);
+                string summary = quantifier.Name + w + " are/have " + SelectedSummarizer1.MemberAndName;
                 var pair = CreateSummaryPair(quantifier, SelectedSummarizer1, summary);
                 Summaries.Add(pair);
             }
             Summaries.Sort((x, y) => y.Key.CompareTo(x.Key));
             Output = GenerateSummarySentences();
+        }
+
+        private string GetQualifierString(string name)
+        {
+            return name.Equals("--: --") ? "" : " of people being/having " + name;
         }
 
         private KeyValuePair<double, (string, List<double>)> CreateSummaryPair(LinguisticVariable quantifier, LinguisticVariable summarizer, string summary)
@@ -111,7 +120,7 @@ namespace ViewModel
             string res = "";
             foreach (var summary in Summaries)
             {
-                LogTValues(summary.Value.summary, summary.Value.tValues);
+                LogTValues(summary);
                 int i = 1;
                 res += summary.Value.summary + " [" + Math.Round(summary.Key, 3) + "]\n";
                 res += "[";
@@ -126,23 +135,23 @@ namespace ViewModel
             return res;
         }
 
-        private void LogTValues(string summary, List<double> tValues)
+        private void LogTValues(KeyValuePair<double, (string summary, List<double> tValues)> summary)
         {
-            string log = summary + ":\n";
-            tValues.ForEach((v) => log += Math.Round(v, 3) + ", ");
+            string log = summary.Value.summary + "; " + Math.Round(summary.Key, 3) + "; ";
+            summary.Value.tValues.ForEach((v) => log += Math.Round(v, 3) + "; ");
             System.Diagnostics.Trace.WriteLine(log.Substring(0, log.Length - 2));
         }
 
         private void Save()
         {
-            string fullPath = Environment.CurrentDirectory;
-            string path = Path.GetFullPath(Path.Combine(fullPath, @"..\..\..\"));
-            string fileName = "export.txt";
-
-            if (!File.Exists(path))
-            {
-                File.WriteAllText(string.Concat(path, fileName), Output);
-            }
+            Task.Run(() => {
+                string summary = Output;
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.ShowDialog();
+                string path = dialog.FileName;
+                File.WriteAllText(path, summary);
+            });
+        
         }
 
         protected void OnPropertyChanged(string name)
