@@ -6,7 +6,6 @@ using System.IO;
 using System.Windows.Input;
 using View.FuzzyLogic;
 using Microsoft.Win32;
-using System;
 using Zad2;
 using Zad2.FuzzyLogic;
 using System.Threading.Tasks;

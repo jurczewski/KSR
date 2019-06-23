@@ -16,7 +16,7 @@
 
         public override string ToString()
         {
-            return Id + ": " + Age + " " + Overall + " " + Value + " " + Wage + " " + Height + " " + Weight + " " + Fk_accuracy + " " + Sprint_speed + " " + Stamina + " " + Strength;
+            return Id + ": " + string.Join(" ", new[] { Age, Overall, Value, Wage, Height, Weight, Fk_accuracy, Sprint_speed, Stamina, Strength });
         }
     }
 }

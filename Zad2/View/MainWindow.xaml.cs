@@ -11,7 +11,8 @@ namespace Zad2
         public MainWindow()
         {
             InitializeComponent();
-            DataLoader.LoadData(ref players);
+            DataLoader.LoadDataFromCSV(ref players);
+            //DataLoader.LoadDataFromDB(ref players);
             viewModel = new MainViewModel(players);
             DataContext = viewModel;
         }
