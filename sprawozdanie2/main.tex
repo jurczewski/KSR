@@ -48,7 +48,7 @@
 "Zadanie polega na stworzeniu aplikacji desktopowej przy użyciu dowolnego formatu bazy danych. W ogólności, aplikacja ma charakter systemu doradczego, który generuje pewną ilość podsumowań lingwistycznych dla podanej bazy, a następnie przedstawia użytkownikowi wybrane – najlepsze wg zastosowanych miar jakości – wyniki, czyli podsumowania lingwistyczne. Aplikacja umożliwiać ma automatyczne generowanie podsumowań lingwistycznych służących do tworzenia krótkich wiadomości tekstowych na podstawie dużej relacyjnej bazy danych." \cite{tresc}
 
 \section{Wprowadzenie}
-Kwestią jaką zajmowaliśmy się w ramach projektu była analiza funkcjonowania lingwistycznych podsumowań baz danych na zbiorach rozmytych. Zbiór rozmyty jest fundamentalnym terminem wykorzystywanym przy naszym projekcie, wobec tego przytoczmy jego definicję:
+Kwestią jaką zajmowaliśmy się w ramach projektu była analiza funkcjonowania lingwistycznych podsumowań baz danych na zbiorach rozmytych. Zbiór rozmyty jest fundamentalnym terminem wykorzystywanym przy naszym projekcie, dlatego też pozwoliliśmy sobie przedstawić jego definicje.
 
 \begin{definition}Niech \(\mathcal{X}\) będzie zbiorem, którego elementy interesują
 nas w sposób bezpośredni czyli jest ,,zbiorem zwykłym''.
@@ -59,7 +59,7 @@ gdzie \(\mu_A(x) : \mathcal{X} \to [0,\,1]\) nazywamy \emph{funkcją
 przynależności do zbioru rozmytego \(A\)}.
 \end{definition}
 
-\textbf{Funkcja przynależności} definiuje w jakim stopniu dany element przynależy do zbioru. W zbiorach rozmytych zakres wartości jakie może ona przyjmować jest rozszerzony do przedziału [0,1]. W naszym projekcie skorzystaliśmy z funkcji przynależności \emph{trójkątnej} oraz \emph{trapezoidalnej}. Przytoczmy ich definicje:
+\textbf{Funkcja przynależności} definiuje w jakim stopniu dany element przynależy do zbioru. W zbiorach rozmytych zakres wartości jakie może ona przyjmować jest rozszerzony do przedziału [0,1]. W naszym projekcie skorzystaliśmy z funkcji przynależności \emph{trójkątnej} oraz \emph{trapezoidalnej}. Ich definicje są następujące:
 
 \begin{definition}[Zbiór rozmyty o trójkątnej funkcji przynależności]
 Zbiór rozmyty \(A\) opisany na przestrzeni \(\mathbb{R}\) jest
@@ -112,17 +112,17 @@ Przejrzysty interfejs użytkownika który ma kontrole nad kwalifikatorem, sumary
 \section{Miary jakości}
 Do określenia jakości podsumowania lingwistycznego zaimplementowaliśmy następujące miary jakości, których wzory zostały zaczerpnięte z \cite{adam}.
 \begin{itemize}
-    \item T1 (Degree of truth) - Suma przynależności wszystkich rozważanych krotek do podsumowania lingwistycznego.
-    \item T2 (Degree of imprecision) - Określa stopień precyzyjności sumaryzatora (miarę jakości podsumowania określaną).
-    \item T3 (Degree of covering) - Reprezentuje stopień w jakim nośnik sumaryzatora pokrywa się z nośnikiem kwalifikatora.
-    \item T4 (Degree of appropriateness) - Definiuje jak dużo krotek przynależy do sumaryzatora, czyli czy dane podsumowanie jest właściwe dla zestawu danych.
-    \item T5 (Length of summary) - Określa jakość podsumowania na podstawie złożoności sumaryzatora, więc im więcej składowych sumaryzatora złożonego, tym mniejsza wartość owej miary.
-    \item T6 (Degree of quantifier imprecision) - Pokazuje w jakim stopniu precyzyjny jest kwantyfikator. Im mniejszy nośnik zbioru rozmytego tym wyższa jest jego precyzja.
-    \item T7 (Degree of quantifier cardinality) - Opisuje stopień precyzji kwantyfikatora, im mniejsza kardynalność kwantyfikatora tym jest on bardziej precyzyjny.
-    \item T8 (Degree of summarizer cardinality) - Opisuje stopień precyzji sumaryzatora, im mniejsza kardynalność kwantyfikatora tym jest on bardziej precyzyjny.
-    \item T9 (Degree of qualifier imprecision) - Określa w jakim stopniu precyzyjny jest kwalifikator. Im szerszy nośnik zbioru rozmytego tym niższa jest jego precyzja, gdyż bierze pod uwagę większy zakres wartości.
-    \item T10 (Degree of qualifier cardinality) - Opisuje stopień precyzji kwalifikatora, im większa jest kardynalność kwalifikator tym jest on mniej precyzyjny.
-    \item T11 (Length of qualifier) - Wyznacza jakość podsumowania na podstawie złożoności kwalifikatora. Im bardziej złożony kwalifikator tym jakość podsumowania gorsza.
+    \item $T_1$ (\emph{Degree of truth}) - Suma przynależności wszystkich rozważanych krotek do podsumowania lingwistycznego.
+    \item $T_2$ (\emph{Degree of imprecision}) - Określa stopień precyzyjności sumaryzatora (miarę jakości podsumowania).
+    \item $T_3$ (\emph{Degree of covering}) - Reprezentuje stopień w jakim nośnik sumaryzatora pokrywa się z nośnikiem kwalifikatora.
+    \item $T_4$ (\emph{Degree of appropriateness}) - Definiuje jak dużo krotek przynależy do sumaryzatora, czyli czy określone podsumowanie jest odpowiednie dla zestawu danych.
+    \item $T_5$ (\emph{Length of summary}) - Określa jakość podsumowania na podstawie złożoności sumaryzatora, dając prostą zależność - im więcej składowych sumaryzatora złożonego, tym mniejsza wartość tej miary.
+    \item $T_6$ (\emph{Degree of quantifier imprecision}) - Pokazuje w jakim stopniu precyzyjny jest kwantyfikator. Im mniejszy nośnik zbioru rozmytego tym wyższa jest jego precyzja.
+    \item $T_7$ (\emph{Degree of quantifier cardinality}) - Opisuje stopień precyzji kwantyfikatora, im mniejsza kardynalność kwantyfikatora tym jest on bardziej precyzyjny.
+    \item $T_8$ (\emph{Degree of summarizer cardinality}) - Opisuje stopień precyzji sumaryzatora, im mniejsza kardynalność kwantyfikatora tym jest on bardziej precyzyjny.
+    \item $T_9$ (\emph{Degree of qualifier imprecision}) - Określa w jakim stopniu precyzyjny jest kwalifikator. Im szerszy nośnik zbioru rozmytego tym niższa jest jego precyzja, gdyż bierze pod uwagę większy zakres wartości.
+    \item $T_{10}$ (\emph{Degree of qualifier cardinality}) - Opisuje stopień precyzji kwalifikatora, im większa jest kardynalność kwalifikator tym jest on mniej precyzyjny.
+    \item $T_{11}$ (\emph{Length of qualifier}) - Wyznacza jakość podsumowania na podstawie złożoności kwalifikatora. Im bardziej złożony kwalifikator tym jakość podsumowania gorsza.
 \end{itemize}
 \section{Materiały i metody}
 \subsection{Baza danych}
@@ -439,7 +439,7 @@ Miary $T_9-T_{11}$ zależały od kwalifikatora - nie dało się ich obliczyć be
 	\centering
 	\begin{tabular}{c c c} 
 		\hline
-		\textbf{Miara} & \textbf{Słaby balans} & \textbf{Brak kwalifikatora}\\ [0.5ex] 
+		\textbf{Miara} & \textbf{Adult} & \textbf{Brak kwalifikatora}\\ [0.5ex] 
 		\hline
 		\hline 
         $T_1$ & 0,587 & 0,948\\
@@ -452,7 +452,7 @@ Miary $T_9-T_{11}$ zależały od kwalifikatora - nie dało się ich obliczyć be
         $T_8$ & 0,999 & 0,999\\
 		\hline
 	\end{tabular}
-	\caption{Tabela przedstawiająca wyniki Eksperymentu 2.1 - kwantyfikator względny (około 2/3 piłkarzy)}
+	\caption{Tabela przedstawiająca wyniki Eksperymentu 2.1 - kwantyfikator względny (około 1/3 piłkarzy)}
 \end{table}
 
 \begin{figure}[H]
@@ -465,8 +465,8 @@ Miary $T_9-T_{11}$ zależały od kwalifikatora - nie dało się ich obliczyć be
 	\centering
 	\begin{tabular}{c c c } 
 		\hline
-		& \textbf{Słaby balans} & \textbf{Brak kwalifikatora}\\ [0.5ex]
-		\textbf{Miara} & \textbf{Około 500} & \textbf{Więcej niż 1000}\\ [0.5ex]
+		& \textbf{Adult} & \textbf{Brak kwalifikatora}\\ [0.5ex]
+		\textbf{Miara} & \textbf{Around 1500} & \textbf{Less than 1000}\\ [0.5ex]
 		\hline
 		\hline 
         $T_1$ & 0,000 & 1,000\\
@@ -532,7 +532,8 @@ W tym badaniu wygenerowaliśmy podsumowania dotyczące dorosłych piłkarzy, kt�
 	\centering
 	\begin{tabular}{c c c c c } 
 		\hline
-		\textbf{Miara} & \textbf{Bad Strength} & \textbf{Bad Stamina} & \textbf{ORAZ} & \textbf{LUB}\\ [0.5ex] 
+		& \textbf{Bad Strength} & \textbf{Bad Stamina} & \textbf{ORAZ} & \textbf{LUB}\\ [0.5ex] 
+		\textbf{Miara} & \textbf{Around 1500} & \textbf{Around 3000} & \textbf{More than 5000} & \textbf{More than 1000}\\ [0.5ex] 
 		\hline
 		\hline 
             $T_1$ & 0,00 & 0,00 & 0,00 & 1,00\\
@@ -548,23 +549,42 @@ W tym badaniu wygenerowaliśmy podsumowania dotyczące dorosłych piłkarzy, kt�
             $T_{11}$ & 1,00 & 1,00 & 1,00 & 1,00\\
 		\hline
 	\end{tabular}
-	\caption{Tabela przedstawiająca wyniki Eksperymentu 3 - kwantyfikator względny (mniej niż 1/3 dorosłych piłkarzy)}
+	\caption{Tabela przedstawiająca wyniki Eksperymentu 3 - kwantyfikator bezwzględny}
 \end{table}
 
 \section{Dyskusja}
 
 \subsection{Wpływ kwantyfikatora na miary}
-
+Miara $T_1$ (pokazująca prawdziwość danego podsumowania) zmieniała się w zależności do kwantyfikatora. Wykresy z eksperymentu 1.1 jak i 1.2 pokazują dla których kwantyfikatorów to podsumowanie jest trafne. W pierwszym (being Light have Good Sprint) widzimy że jest to względne "Around half" i bezwględne "Less than 1000". W drugim (being Short have High Wage) jest to odpowiednio "Less than a third" i "Less than 1000". Dla kwantyfikatorów "sąsiadów" miara ta zmierzała ku zerze. Dla reszty po prostu wynosiła zero.\\
+\newline
+Miary $T_6$ i $T_7$ opisują precyzyjność kwantyfikatora. Dla opisanych wyżej kwantyfikatorów przyjmowały one bardzo wysokie wartości (około 0.9) chociaż potrafiły zejść do 0.7.\\
+\newline
+Miary $T_2-T_5$ oraz $T_8-T_{11}$ nie zmieniały swoich wartości w zależności od użytego kwantyfikatora, co wprost wynika z braku wykorzystania kwantyfikatora w tych wzorach. 
 \subsection{Wpływ kwalifikatora na miary}
-
+Największą różnicą miedzy eksperymentami była zmiana miary $T_1$ przy braku lub obecności kwalifikatora. W naszej ocenie porównywanie jednak jej wyników jest bezcelowe - ponieważ pracuję się wtedy na zupełnie innych zbiorach. Przykładowo różnica miedzy $T_1$ z i bez kwalifikatora równa 1.0 skutkowała wahaniami dla miar $T_6$ i $T_7$. \\
+\newline
+Miara $T_4$ mówi o tym, jak wiele krotek przynależy do sumaryzatora. Ze względu na $T_3$ we wzorze, jej wartość się zmienia, jednakże jej wpływ omówimy w dalszej części opracowania badań.\\
+\newline
+Miary $T_2, T_5$ oraz $T_8$ nie zmieniały swoich wartości w obrębie jednego eksperymentu, gdyż zależą od sumaryzatora, a nie kwalifikatora. 
 \subsection{Wpływ sumaryzatora na miary}
-
-\subsection{Inne spostrzeżenia}
-
+Miara $T_2$ określa stopień precyzyjności sumaryzatora. Biorąć pod uwagę ten jak i poprzednie eksperymenty można z stwierdzić że miara jest tym większa im bardziej precyzyjny jest użyty sumaryzator. W naszym przypadku precyzyjny okazał sie "Bad Stamina", "Bad Strength" ale już nie "Decetn Free Kick".\\
+\newline
+Miara $T_3$ reprezentuje stopień w jakim nośnik sumaryzatora pokrywa się z nośnikiem kwalifikatora. U nas jest najwyższa dla "Bad Stamina OR Bad Strength" natomiast bliska zeru dla "AND".\\
+\newline
+Miara $T_4$ mówi o tym ile krotek należy do sumaryzatora. Określa ona jak bardzo podsumowane wartości pasują do zbioru danych. Dla wszystkich 8 pomiarów jej wartości plasowały się w poniżej 0.2, osiągając 0.0 dla "Bad Stamina AND Bad Strength".\\
+\newline
+Miara $T_5$ zależy od ilości sumaryzatorów. Dla jednego sumaryzatora osiąga wartość 1, zaś dla dwóch - wartość 0.5. Wraz ze zwiększeniem liczby sumaryzatorów jej wartość by malała.\\
+\newline
+Miara $T_8$ opisująca precyzyjność sumaryzatora dla wszystkich przeprowadzonych przez nas eksperymentów uzyskiwała wartości bardzo bliskie bądź równe 1. 
 
 \section{Wnioski}
 \begin{itemize}
-\item Podsumowania lingwistyczne są bardzo dobrą sprawa
+    \item Lingwistyczne podsumowania baz danych znacznie przyspieszają analizę dużych zbiorów danych z wieloma atrybutami, dzięki generowaniu prostych i zrozumiałych informacji jej dotyczących.
+    \item Liczba krotek w bazie danych bezpośrednio przekłada się precyzyjność podsumowania.
+    \item Duża cześć wygenerowanych podsumowań która pokazuje proste zależności, była łatwa do odgadnięcia przed rozpoczęciem badań. Jednakże omawiane metody (i nasza implementacja) dostarcza formalnej statystycznej miary, dzięki czemu wyrażone w języku naturalnym mają poparcie naukowe.
+    \item Należy tak dobrać zbiory rozmyte etykiet aby się nakładały. Dzięki czemu pozbywamy się pustych obszarów dziedziny.
+    \item Dobrą praktyką są wąskie wartości przy funkcjach przynależności, osiągamy wtedy bardziej miarodajne wyniki.
+    \item Miara $T_1$ powinna być jako pierwsza brana pod uwagę. Dopiero przy osiągnięciu wartości dodatnich, powinniśmy przejść do analizy innych miar.
 \end{itemize}
 
 \begin{thebibliography}{}
